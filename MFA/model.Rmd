@@ -52,6 +52,7 @@ loadings="matrix")
 # center and scale: the same parameters as in the function scale(), logical values or a numeric vector 
 mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
 
+datarownames<-row.names(data)
 # scale and center
 data<-scale(data,center,scale)
 
@@ -113,7 +114,7 @@ delta_inv[is.infinite(delta_inv)]<-0
 P <- as(u %*% M_half_inv,"matrix")
 # Q FOR Q=Xt*M*P*DELTA_inverse
 Q <- as(t(X) %*% M %*% P %*% delta_inv, "matrix")
-
+dimnames(Q) <- list(rownames(Q),colnames(Q, do.NULL = FALSE, prefix = "Dim"))
 
 
 # build a list: 'partial_factor_score' to store partial factor score
@@ -128,6 +129,7 @@ common_factor_score<-0
 for (i in 1:length(sets)){
 datai<- data.matrix(eval(parse(text=paste0("Group",i))))
 score<-length(sets) * (1/singularvalues[i]^2) * datai %*% t(datai)  %*% M %*% P %*% delta_inv
+dimnames(score) <- list(datarownames,colnames(score, do.NULL = FALSE, prefix = "Dim"))
 partial_factor_score[[paste0("Partial Score: Group ",i)]]=as(score,"matrix")
 common_factor_score<-score+common_factor_score
 }
@@ -148,6 +150,7 @@ loadings = as(Q,"matrix")
 data<-read.csv("wine.csv",header=T,stringsAsFactors=F)
 datas<-data[,2:54]
 ndatas<-apply(datas,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
+row.names(ndatas)<-data[,1]
 test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),center=FALSE,scale=FALSE)
 
 
