@@ -47,8 +47,8 @@ loadings="matrix")
 
 # constructor function: to construct 'mfa' and run the model to get attributes
 # parameter: data: could be a matrix or a data.frame, should be in the same order of sets
-# parameter: sets: a vector contains number of variables of each group
-# eg. sets=c(3,4), means the first 3 columns of data is Group 1 and the next 4 columns is Group2
+# parameter: sets: list of vector contains vector of indices of each group
+# eg. sets=c(1:3,4:5), means the 1:3 columns of data is Group 1 and the next 4:5 columns is Group2
 # center and scale: the same parameters as in the function scale(), logical values or a numeric vector 
 mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
 
@@ -56,21 +56,15 @@ mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
 data<-scale(data,center,scale)
 
 # divide data into several group according to values in sets
-prevloc<-0
 # store the ith group of data to variable "Groupi"
 for (i in 1:length(sets)) {
-if (i==1){
-assign(paste0("Group",i),data.matrix(data[,1:sets[i]]))
-}else{
-prevloc<-prevloc+sets[i-1]
-assign(paste0("Group",i),data.matrix(data[,(prevloc+1):(sets[i]+prevloc)]))
-}
+assign(paste0("Group",i),data.matrix(data[,min(sets[[i]]):max(sets[[i]])]))
 }
 
 
 # for each data groups conduct svd
 # store the first singular values in singularvalues
-singularvalues<-c(rep(1,dim(X)[1]))
+singularvalues<-c(rep(1,dim(data)[1]))
 for (i in 1:length(sets)) {
 singularvalues[i]<-max(svd(eval(parse(text=paste0("Group",i))))$d)
 }
@@ -81,23 +75,23 @@ singularvalues[i]<-max(svd(eval(parse(text=paste0("Group",i))))$d)
 # each first square singular value is expanded to the same dimension of each data group
 expanded<-c()
 for (i in 1:length(sets)){
-expanded<-c(expanded,rep(singularvalues[i],sets[i]))
+expanded<-c(expanded,rep(singularvalues[i],max(sets[[i]])-min(sets[[i]])+1))
 }
-A<-Matrix::Diagonal(length(expanded), x = 1/expanded^2)
-A_half<-Matrix::Diagonal(length(expanded), x = 1/expanded)
-A_half_inv<-Matrix::Diagonal(length(expanded), x = expanded)
+A<-diag(x = 1/expanded^2,length(expanded),length(expanded))
+print(dim(A))
+A_half<-diag(x = 1/expanded,length(expanded),length(expanded))
+A_half_inv<-diag( x = expanded,length(expanded),length(expanded))
 
 
 
 # construct M to compute P: PMPt=I
-M<-Matrix::Diagonal(dim(data)[1],x=1/(dim(data)[1]))
-M_half<-Matrix::Diagonal(dim(data)[1],x=1/sqrt((dim(data)[1])))
-M_half_inv<-Matrix::Diagonal(dim(data)[1],x=sqrt((dim(data)[1])))
+M<-diag(x=1/(dim(data)[1]),dim(data)[1],dim(data)[1])
+M_half<-diag(x=1/sqrt((dim(data)[1])),dim(data)[1],dim(data)[1])
+M_half_inv<-diag(x=sqrt((dim(data)[1])),dim(data)[1],dim(data)[1])
 
 
 #  X: the whole data
 X<-data.matrix(data)
-
 # Construct S=XAXt
 S<-as(X %*% A %*% t(X),"matrix")
 
@@ -109,7 +103,6 @@ for (i in 1:length(eigens$values)){
 d[i,i]<-eigens$values[i]
 }
 u<-eigens$vectors
-print(eigens$values)
 lambda<-as(M_half %*% d %*% M_half,"matrix")
 
 delta_value<-diag(as(sqrt(lambda),"matrix"))
@@ -158,7 +151,7 @@ loadings = as(Q,"matrix")
 data<-read.csv("wine.csv",header=T,stringsAsFactors=F)
 datas<-data[,2:54]
 ndatas<-apply(datas,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
-test<-mfa(ndatas,sets=c(6,6,6,5,6,5,4,6,5,4),center=FALSE,scale=FALSE)
+test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),center=FALSE,scale=FALSE)
 
 
 ################ supplementary method #############
