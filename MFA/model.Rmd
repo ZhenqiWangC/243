@@ -78,7 +78,6 @@ for (i in 1:length(sets)){
 expanded<-c(expanded,rep(singularvalues[i],max(sets[[i]])-min(sets[[i]])+1))
 }
 A<-diag(x = 1/expanded^2,length(expanded),length(expanded))
-print(dim(A))
 A_half<-diag(x = 1/expanded,length(expanded),length(expanded))
 A_half_inv<-diag( x = expanded,length(expanded),length(expanded))
 
@@ -112,8 +111,6 @@ delta_inv[is.infinite(delta_inv)]<-0
 
 # P is PMPt=I FOR S=P*LAMBDA*Pt
 P <- as(u %*% M_half_inv,"matrix")
-print("P")
-print(P[,1:2])
 # Q FOR Q=Xt*M*P*DELTA_inverse
 Q <- as(t(X) %*% M %*% P %*% delta_inv, "matrix")
 
