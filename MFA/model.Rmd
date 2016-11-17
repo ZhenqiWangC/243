@@ -35,6 +35,7 @@ devtools::create("~/MFA")
 setClass(
 Class="mfa",
 slots=list(
+sets="list",
 eigenvalues="numeric",
 common_factor_score="matrix",
 partial_factor_score="list",
@@ -53,6 +54,7 @@ loadings="matrix")
 mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
 
 datarownames<-row.names(data)
+
 # scale and center
 data<-scale(data,center,scale)
 
@@ -138,6 +140,7 @@ common_factor_score<-common_factor_score/length(sets)
 
 # loading uses Q
 new (Class = "mfa",
+sets=sets,
 eigenvalues = delta_value^2,
 common_factor_score = as(common_factor_score,"matrix"),
 partial_factor_score = partial_factor_score,
@@ -147,11 +150,17 @@ loadings = as(Q,"matrix")
 
 ######################### test ###################
 #load wine data
-data<-read.csv("wine.csv",header=T,stringsAsFactors=F)
-datas<-data[,2:54]
-ndatas<-apply(datas,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
-row.names(ndatas)<-data[,1]
-test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),center=FALSE,scale=FALSE)
+data<-read.csv("wine.csv",header=F,stringsAsFactors = F)
+datas<-data[2:length(data[,1]),2:54]
+sets<-list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53)
+ndatas<-apply(datas,2,function(x){ (as.numeric(x)-mean(as.numeric(x)))/norm(as.numeric(x)-mean(as.numeric(x)),type="2")})
+coln<-c()
+for (i in 1:length(sets)){
+coln<-c(coln,paste0(data[1,sets[[i]]+1],".G",i))
+}
+colnames(ndatas)<-coln
+rownames(ndatas)<-data[2:length(data[,1]),1]
+test<-mfa(ndatas,sets=sets,center=FALSE,scale=FALSE)
 
 
 ################ supplementary method #############
