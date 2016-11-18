@@ -1,4 +1,4 @@
-setGeneric("bootstrp",function(object,nbt=1000)standardGeneric("bootstrap"))
+setGeneric("bootstrap",function(object,nbt=1000)standardGeneric("bootstrap"))
 setMethod("bootstrap",signature="mfa",
           function(object,nbt=1000){
           groups<-length(object@partial_factor_score)
