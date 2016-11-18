@@ -51,7 +51,7 @@ loadings="matrix")
 #' @title MFA
 #' @description Creates an object of class \code{"mfa"}
 #' @param data could be a matrix or a data.frame, should be in the same order of sets
-#' @param sets list of vector contains vector of indices of each group
+#' @param sets list of vector contains vector of indices or variable names of each group
 #' @param ncomps integer indicating how many number of components are to be extracted
 #' @param center either a logical value or a numeric vector of length equal to the number of active variables in the analysis
 #' @param scale either a logical value or a numeric vector of length equal to the number of active variables in the analysis
@@ -70,7 +70,10 @@ loadings="matrix")
 #' test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),ncomp=2,center=FALSE,scale=FALSE)
 #' 
 #' # character sets
-#' 
+#' # Use the first and last variable names of each group: 
+#' test<-mfa(ndatas,sets=list(c("V1.G1","V6.G1"),c("V1.G2","V8.G2")...),...)
+#' # or use the full list of variable names of each group:
+#' test<-mfa(ndatas,sets=list(c("V1.G1","V2.G1","V3.G1","V4.G1","V5.G1","V6.G1"),c("V1.G2","V2.G2","V3.G2","V4.G2","V7.G2","V8.G2")...),...) 
 #' # only center or only scale
 
 
@@ -85,6 +88,30 @@ datarownames<-row.names(data)
 
 # scale and center
 data<-scale(data,center,scale)
+
+# check singularity
+rank<-Matrix::rankMatrix(data)[1]
+if (!is.null(ncomps)){
+  if ((ncomps)>=rank){
+   warning(paste0("Matrix is singular: outputing ",rank," dimensions.")) 
+  }else{
+    rank<-ncomps
+  }
+}else{
+  if (!rank%in%c(dim(data))){
+  warning(paste0("Matrix is singular: outputing ",rank," dimensions."))
+}
+}
+
+# if sets is character: turn sets into indicies acccording to rownames of data
+osets<-sets
+if (!is.numeric(sets[[1]])){
+  newlist<-list()
+  for (i in 1:length(sets)){
+  newlist[[i]]<-c(which(colnames(data)==sets[[i]][1]):which(colnames(data)==sets[[i]][length(sets[[i]])]))
+  }
+sets<-newlist
+}
 
 # divide data into several group according to values in sets
 # store the ith group of data to variable "Groupi"
@@ -144,7 +171,7 @@ delta_inv[is.infinite(delta_inv)]<-0
 # P is PMPt=I FOR S=P*LAMBDA*Pt
 P <- as(u %*% M_half_inv,"matrix")
 # Q FOR Q=Xt*M*P*DELTA_inverse
-Q <- as(t(X) %*% M %*% P %*% delta_inv, "matrix")
+Q <- as(t(X) %*% M %*% P %*% delta_inv, "matrix")[,1:rank]
 dimnames(Q) <- list(rownames(Q),colnames(Q, do.NULL = FALSE, prefix = "Dim"))
 
 
@@ -159,7 +186,7 @@ partial_factor_score<-list()
 common_factor_score<-0
 for (i in 1:length(sets)){
 datai<- data.matrix(eval(parse(text=paste0("Group",i))))
-score<-length(sets) * (1/singularvalues[i]^2) * datai %*% t(datai)  %*% M %*% P %*% delta_inv
+score<-length(sets) * (1/singularvalues[i]^2) * datai %*% t(datai)  %*% M %*% P %*% delta_inv[,1:rank]
 dimnames(score) <- list(datarownames,colnames(score, do.NULL = FALSE, prefix = "Dim"))
 partial_factor_score[[paste0("Partial Score: Group ",i)]]=as(score,"matrix")
 common_factor_score<-score+common_factor_score
@@ -169,8 +196,8 @@ common_factor_score<-common_factor_score/length(sets)
 
 # loading uses Q
 new (Class = "mfa",
-sets=sets,
-eigenvalues = delta_value^2,
+sets=osets,
+eigenvalues = c(delta_value^2)[1:rank],
 weights= weights,
 common_factor_score = as(common_factor_score,"matrix"),
 partial_factor_score = partial_factor_score,
@@ -183,6 +210,7 @@ loadings = as(Q,"matrix")
 data<-read.csv("wine.csv",header=F,stringsAsFactors = F)
 datas<-data[2:length(data[,1]),2:54]
 sets<-list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53)
+
 ndatas<-apply(datas,2,function(x){ (as.numeric(x)-mean(as.numeric(x)))/norm(as.numeric(x)-mean(as.numeric(x)),type="2")})
 coln<-c()
 for (i in 1:length(sets)){
@@ -190,7 +218,7 @@ coln<-c(coln,paste0(data[1,sets[[i]]+1],".G",i))
 }
 colnames(ndatas)<-coln
 rownames(ndatas)<-data[2:length(data[,1]),1]
-test<-mfa(ndatas,sets=sets,center=FALSE,scale=FALSE)
+test<-mfa(ndatas,sets=sets,ncomps=3,center=FALSE,scale=FALSE)
 
 
 ################ supplementary method #############
@@ -235,9 +263,8 @@ partial_plot<-function(group_num,data,data2,names){
 }
 
 
-setGeneric("plot",function(object,dim)standardGeneric("plot"))
 setMethod("plot",signature="mfa",
-       function(object,dim){
+       function(x,dim){
          blankPlot <- ggplot2::ggplot()+ggplot2::geom_blank(ggplot2::aes(1,1))+
            ggplot2::theme(
              plot.background = ggplot2::element_blank(),
@@ -255,17 +282,25 @@ setMethod("plot",signature="mfa",
          
            x<-dim[1]
            y<-dim[2]
-           sets<-object@sets
+           sets<-x@sets
+# if sets is character: turn sets into indicies acccording to rownames of data
+if (!is.numeric(sets[[1]])){
+  newlist<-list()
+  for (i in 1:length(sets)){
+  newlist[[i]]<-c(which(rownames(x@loadings)==sets[[i]][1]):which(rownames(x@loadings)==sets[[i]][length(sets[[i]])]))
+  }
+sets<-newlist
+}
            names<-sapply(dim,function(x){paste0("Dim",x)})
            partial<-lapply(test@partial_factor_score,function(x){x[,dim]})
-           compromise<-data.frame(object@common_factor_score[,dim])
-           loadings<--data.frame(object@loadings[,dim])
-           eigen<-data.frame("eigen"=object@eigenvalues)
-           eigen$id<-sapply(c(1:length(object@eigenvalues)),function(x){paste0("Dim",x)})
+           compromise<-data.frame(x@common_factor_score[,dim])
+           loadings<--data.frame(x@loadings[,dim])
+           eigen<-data.frame("eigen"=x@eigenvalues)
+           eigen$id<-sapply(c(1:length(x@eigenvalues)),function(x){paste0("Dim",x)})
 
            # rescale loading to singular value
-           loadings[,1]<-loadings[,1]*(object@eigenvalues[1]/sqrt(norm(loadings[,1],type="2")^2/length(loadings[,1])))
-           loadings[,2]<-loadings[,2]*(object@eigenvalues[2]/sqrt(norm(loadings[,2],type="2")^2/length(loadings[,2])))
+           loadings[,1]<-loadings[,1]*(x@eigenvalues[1]/sqrt(norm(loadings[,1],type="2")^2/length(loadings[,1])))
+           loadings[,2]<-loadings[,2]*(x@eigenvalues[2]/sqrt(norm(loadings[,2],type="2")^2/length(loadings[,2])))
            compromise$id<-rownames(compromise)
            loadings$id<-rownames(loadings)
 
@@ -315,11 +350,6 @@ setMethod("plot",signature="mfa",
                            legend.text=ggplot2::element_text(size=8))+
               ggplot2::ggtitle(paste0("Eigenvalues"))+ggplot2::labs(x="",y="")+
               ggplot2::guides(fill = ggplot2::guide_legend(keywidth = 0.9, keyheight = 0.9))
-
-
-
-
-
 
           # plot partial factor score
             plist <- list()
