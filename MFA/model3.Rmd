@@ -223,6 +223,7 @@ test<-mfa(ndatas,sets=sets,ncomps=3,center=FALSE,scale=FALSE)
 
 ################ supplementary method #############
 
+#' @export
 
 # set print() to print basic infomation
 setMethod("print",
@@ -234,6 +235,7 @@ setMethod("print",
   }
 )
 print(test)
+
 
 # set plot() to plot table given two dimensions
 # plot method and functions for plot mfa
@@ -262,6 +264,9 @@ partial_plot<-function(group_num,data,data2,names){
     ggplot2::ggtitle(paste0("Partial Factor Score: Group ",group_num))+ggplot2::labs(x=names[1],y=names[2])
 }
 
+#' @param object a R object of mfa
+#' @param dim a integer vector of two values
+#' @export
 
 setMethod("plot",signature="mfa",
        function(x,dim){
@@ -388,9 +393,14 @@ plot(test,dim=c(1,2))
 
 
 
-
+#' @title Eigenvalue method
+#' @description Returns a table with summarizing information about the obtained eigenvalues.
+#' @param x an R object
+#' @export
 # set eigenvalues() to take 'mfa' and return a table (like Table 2)
 setGeneric("eigenvalues",function(x,...) standardGeneric("eigenvalues"))
+
+#' @export
 setMethod("eigenvalues",signature="mfa",
   function(x,...){
     eigenvalue <- x@eigenvalues
@@ -405,10 +415,17 @@ setMethod("eigenvalues",signature="mfa",
     df
   }
 )
+
 eigenvalues(test)
 
+#' @title Contributions method
+#' @description Returns a list of three tables with contributions
+#' @param x an R object
+#' @export
 # set contributions() to take 'mfa' and return a matrix of contributions
 setGeneric("contributions",function(x)standardGeneric("contributions"))
+
+#' @export
 setMethod("contributions",signature="mfa",
   function(x){
     
@@ -439,12 +456,36 @@ setMethod("contributions",signature="mfa",
 
 contributions(test)
 
+
+#' @title Rv Coefficients
+#' @description Return a value of Rv coefficient between two tables
+#' @param table1 a normalized data matrix
+#' @param table2 a normalized data matrix
+#' @return a value of Rv coefficient between two tables
+#' @export
+#' @examples
+#' # default 
+#' x1 <- scale(wine_data[,1:6])
+#' x2 <- scale(wine_data[,7:12])
+#' RV(x1,x2)
+
 # set funtion RV() to take two tables and return rv coefficient
 RV<-function(table1,table2){
 	t1 <- t(table1)
 	t2 <- t(table2)
   sum(diag((table1 %*% t1) %*% (table2 %*% t2)))/sqrt(sum(diag((table1 %*% t1) %*% (table1 %*% t1)))*sum(diag((table2 %*% t2) %*% (table2 %*% t2))))
 }
+
+#' @title Rv Table
+#' @description Return a table of Rv coefficients between any two subsets of a normalized dataset
+#' @param dataset a normalized dataframe or matrix
+#' @param sets list of vector contains vector of indices of each group
+#' @return a table of Rv coefficients
+#' @export
+#' @examples
+#' # default 
+#' nadtas <- scale(wine_data)
+#' RV_table(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53))
 RV_table <- function(dataset,sets){
   if(!is.data.frame(dataset)&!is.matrix(dataset)){stop("dataset must be a matrix or a dataframe")}
     RV <- matrix(NA,length(sets),length(sets))
@@ -461,6 +502,18 @@ RV_table <- function(dataset,sets){
 RV_table(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53))
 
 
+#' @title Lg Coefficients
+#' @description Return a value of Lg coefficient between two tables
+#' @param table1 a normalized data matrix
+#' @param table2 a normalized data matrix
+#' @return a value of Lg coefficient between two tables
+#' @export
+#' @examples
+#' # default 
+#' x1 <- scale(wine_data[,1:6])
+#' x2 <- scale(wine_data[,7:12])
+#' LG(x1,x2)
+
 # set funtion LG() to take two tables and return lg coefficient
 LG<-function(table1,table2){
 	t1 <- t(table1)
@@ -470,6 +523,16 @@ LG<-function(table1,table2){
   sum(diag((table1 %*% t1) %*% (table2 %*% t2)))/(gamma1^2*gamma2^2)
 }
 
+#' @title Lg Table
+#' @description Return a table of Lg coefficients between any two subsets of a normalized dataset
+#' @param dataset a normalized dataframe or matrix
+#' @param sets list of vector contains vector of indices of each group
+#' @return a table of Lg coefficients
+#' @export
+#' @examples
+#' # default 
+#' nadtas <- scale(wine_data)
+#' LG_table(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53))
 
 LG_table <- function(dataset,sets){
   if(!is.data.frame(dataset)&!is.matrix(dataset)){stop("dataset must be a matrix or a dataframe")}
@@ -485,7 +548,47 @@ LG_table <- function(dataset,sets){
 }
 LG_table(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53))
 
-# Bootstrap?
+
+# Bootstrap
+#' @title Bootstrap
+#' @description Return a matrix of bootstrap ratio
+#' @param mfa an 'mfa' object
+#' @param B an integer number of a bootstrap sample size
+#' @return a matrix of bootstrap ratio
+#' @export
+#' @examples
+#' # default 
+#' ndatas<-apply(wine_data,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
+#' test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),center=FALSE,scale=FALSE)
+#' bootstrap(test,1000)
+
+function(mfa,B){
+  if(class(mfa)!="mfa"){stop("mfa must be an 'mfa' object")}
+  partial <- mfa@partial_factor_score
+  l <- length(partial)
+  common_sum <-  matrix(0,dim(partial[[1]])[1],dim(partial[[1]])[2])
+  common_sqrsum <- matrix(0,dim(partial[[1]])[1],dim(partial[[1]])[2])
+  for(j in 1:B){
+    sample <- sample(1:l,l,replace = TRUE)
+    #sample <- 1:10
+    sum <- matrix(0,dim(partial[[1]])[1],dim(partial[[1]])[2])
+    for(i in sample){
+      sum <- sum + partial[[sample[i]]]
+    }
+    common <- sum/l
+    common_sqrsum <- common_sqrsum + common^2
+    common_sum <- common_sum + common
+  }
+  common_mean <- common_sum/B
+  common_sqrmean <- common_sqrsum/B
+  common_var <- common_sqrmean - common_mean^2
+  common_sd <- sqrt(common_var)
+  boostrap_ratio <- common_mean/common_sd
+  boostrap_ratio 
+  #common_sd
+}
+
+bootstrap(test,1000)
 ```
 
 
