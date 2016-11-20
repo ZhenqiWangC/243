@@ -304,6 +304,7 @@ sets<-newlist
            eigen$id<-sapply(c(1:length(x@eigenvalues)),function(x){paste0("Dim",x)})
 
            # rescale loading to singular value
+           loadings<-scale(loadings,center =TRUE,scale=FALSE)
            loadings[,1]<-loadings[,1]*(x@eigenvalues[1]/sqrt(norm(loadings[,1],type="2")^2/length(loadings[,1])))
            loadings[,2]<-loadings[,2]*(x@eigenvalues[2]/sqrt(norm(loadings[,2],type="2")^2/length(loadings[,2])))
            compromise$id<-rownames(compromise)
