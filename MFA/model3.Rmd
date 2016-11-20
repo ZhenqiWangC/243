@@ -285,8 +285,6 @@ setMethod("plot",signature="mfa",
              axis.line = ggplot2::element_blank()
            )
          
-           x<-dim[1]
-           y<-dim[2]
            sets<-x@sets
 # if sets is character: turn sets into indicies acccording to rownames of data
 if (!is.numeric(sets[[1]])){
