@@ -360,8 +360,10 @@ sets<-newlist
             plist <- list()
             for (i in 1:length(sets)){
               data<-data.frame(partial[[i]])
+              data[,2]<--data[,2]
               data$id<-rownames(data)
               data2<-loadings[sets[[i]],]
+              data2[,1]<--data2[,1]
               plot<-partial_plot(i,data,data2,names)
               plist[[i]]<-plot
             }
