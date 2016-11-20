@@ -303,8 +303,8 @@ sets<-newlist
 
            # rescale loading to singular value
 
-           loadings[,1]<-loadings[,1]*(x@eigenvalues[1]/sd(loadings[,1]))
-           loadings[,2]<-loadings[,2]*(x@eigenvalues[2]/sd(loadings[,2]))
+           loadings[,1]<-loadings[,1]*(sqrt(x@eigenvalues[1])/sd(loadings[,1]))
+           loadings[,2]<-loadings[,2]*(sqrt(x@eigenvalues[2])/sd(loadings[,2]))
     
            compromise$id<-rownames(compromise)
            loadings$id<-rownames(loadings)
