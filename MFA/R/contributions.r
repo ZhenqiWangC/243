@@ -1,15 +1,11 @@
 #' @include mfa.r
 #' Method contributions.
-#' @name contributions
-#' @rdname contributions-methods
-#' @exportMethod contributions
+#' @title contributions method
+#' @param object an mfa object
+#' @export
 setGeneric("contributions",function(object)standardGeneric("contributions"))
 
-#' @rdname contributions-methods
-#' @aliases contributions, mfa-method
-#' @title Contributions method
-#' @description Returns a list of three tables with contributions
-#' @param object an mfa object
+
 #' @export
 # set contributions() to take 'mfa' and return a matrix of contributions
 

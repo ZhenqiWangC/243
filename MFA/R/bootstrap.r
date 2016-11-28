@@ -1,7 +1,5 @@
 #' @include mfa.r
 # Bootstrap
-#' @rdname bootstrap-methods
-#' @aliases bootstrap,mfa-method
 #' @title Bootstrap
 #' @description Return a matrix of bootstrap ratio
 #' @param object an 'mfa' object
