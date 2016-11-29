@@ -99,8 +99,9 @@ mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
     check_sets<-c(check_sets,sets[[i]])
   }
   if(length(check_sets)!=ncol(data)) {stop("The sum of sets lengths does not equal to the number of columns.")}
-  if(identical(1:ncol(data),check_sets)) {warning("sets contain some overlapped and skipped columns.")}
-  
+  if(any(!check_sets%in%1:ncol(data))) {stop("sets out of bounds")}
+  if(!identical(1:ncol(data),check_sets)) {warning("sets contain some overlapped and skipped columns.")}
+
   
    
   datarownames<-row.names(data)
