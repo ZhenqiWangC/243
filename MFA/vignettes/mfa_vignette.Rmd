@@ -1,6 +1,7 @@
 ---
 title: "An Overview of the MFA package"
 author:
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{MFA}
   %\VignetteEngine{knitr::rmarkdown}
@@ -14,11 +15,24 @@ library(MFA)
 ```
 
 This vignette gives an introduction to the model Multiple Factor Analysis and an overview the package MFA developed to apply the model on data. You might find reading this entire vignette helpful to get a broad understanding of what can be done in R using the MFA. 
-## 1 Introdution to Multiple Factor Analysis
+
+## 1 Introdution to Multiple Factor Analysis {#sec:line-type-spec}
+
 ## 2 Step by step tutorial
+
+We are using a data example included in the package MFA to illustrate the use of the MFA package step by step. This data example concerns 12 wines from three
+wine regions and ten expert assessors
+were asked to evaluate these wines on 9-point rating
+scales, using four standard variables plus extra variables if any aseessor feels necessary.
+
 ## 2.1 Getting started
 To run any of the MFA functions, it is necessary to make the package active by using the library command:
-```{r,echo=F}
+```{r}
 library(MFA)
 ```
-It is required that the data we apply MFA functions on is organized in a certain 
+The data on which we apply MFA functions should be either data frame or matrix object in R. The users could of course read data from a local file and here are of course many ways to enter data into R, just make sure prepare the data to be analyzed as data frame or matrix. The data example 'wine' has been loaded in the global environment in R when loading the MFA package, we can use head( ) to check the 'wine' data. As the data example is of many variables, we will choose the first 12 to show:
+```{r}
+head(wine)[,1:12]
+```
+
+It is required that the data on which we apply MFA functions is organized in certain way that the functions could separate each group by the arrangement of the columns of the input data, as shown in the data example 'wine', the variables of each group are stacked together and one group after another, like the first 6 columns are in Group 1 and the next 6 columns are in Group2, and so on. It's also recommended that the input data has row names and columns names for more readable outputs of the MFA functions.
