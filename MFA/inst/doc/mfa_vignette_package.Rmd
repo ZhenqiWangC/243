@@ -25,7 +25,7 @@ wine regions and ten expert assessors
 were asked to evaluate these wines on 9-point rating
 scales, using four standard variables plus extra variables if any aseessor feels necessary.
 
-### 2.1 Getting started
+## 2.1 Getting started
 To run any of the MFA functions, it is necessary to make the package active by using the library command:
 ```{r}
 library(MFA)
@@ -40,29 +40,29 @@ It is required that the data on which we apply MFA functions is organized in cer
 colnames(wine)
 ```
 It's also recommended that the input data has row names and columns names for more readable outputs of the MFA functions.
-### 2.2 mfa
+## 2.2 mfa
 ```{r,echo=F}
 mfa_wine<-mfa(wine,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),ncomps=NULL,center=TRUE,scale=TRUE)
 ```
-### 2.3 print()
+## 2.3 print()
 ```{r}
 print(mfa_wine)
 ```
-### 2.4 plot()
+## 2.4 plot()
 ```{r}
 plot(mfa_wine,dim=c(1,2),singleoutput='eig')
 ```
-```{r,echo=F}
+```{r}
 plot(mfa_wine,dim=c(1,2),singleoutput='com')
 ```
-```{r,echo=F}
+```{r}
 plot(mfa_wine,dim=c(1,2),singleoutput='pat')
 ```
-### 2.5 eigenvalues()
+## 2.5 eigenvalues()
 ```{r}
 eigenvalues(mfa_wine)
 ```
-### 2.6 contributions()
+## 2.6 contributions()
 ```{r}
 contributions(mfa_wine)
 ```

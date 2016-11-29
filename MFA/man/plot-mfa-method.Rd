@@ -5,12 +5,14 @@
 \alias{plot,mfa-method}
 \title{plot method}
 \usage{
-\S4method{plot}{mfa}(x, dim)
+\S4method{plot}{mfa}(x, dim, singleoutput = NULL)
 }
 \arguments{
 \item{x}{a R object of mfa}
 
 \item{dim}{a integer vector of two values}
+
+\item{singleoutput}{a character value among ('eig','com','par') indicating which graph to output}
 }
 \description{
 Returns plots of eigenvalues, compromise factor scores and partial factor score
