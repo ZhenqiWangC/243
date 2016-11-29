@@ -41,17 +41,36 @@ setClass(
 #' test<-mfa(wine_data,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53))
 #'
 #' # use your own scale method
+#' #scale with vector
+#' test<-mfa(wine_data,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),
+#'           center = apply(wine_data,2,mean),scale = apply(wine_data,2,sd))
+#' # scale in advance
 #' ndatas<-apply(wine_data,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
 #' test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),center=FALSE,scale=FALSE)
 #'
 #' # only print the first two components
+#' ndatas<-apply(wine_data,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
 #' test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),ncomp=2,center=FALSE,scale=FALSE)
 #'
 #' # character sets
+#' ndatas<-apply(wine_data,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
 #' # Use the first and last variable names of each group:
-#' test<-mfa(ndatas,sets=list(c("V1.G1","V6.G1"),c("V1.G2","V8.G2")...),...)
+#' test<-mfa(ndatas,sets=list(c("V1","V6"),c("V1.1","V8"),c("V1.2","V10"),c("V1.3","V8.1"),
+#'                            c("V1.4","V12"),c("V1.5","V13"),c("V1.6","V4.6"),
+#'                            c("V1.7","V5.1"),c("V1.8","V15"),c("V1.9","V4.9")
+#'                            ),scale = F, center = F)
 #' # or use the full list of variable names of each group:
-#' test<-mfa(ndatas,sets=list(c("V1.G1","V2.G1","V3.G1","V4.G1","V5.G1","V6.G1"),c("V1.G2","V2.G2","V3.G2","V4.G2","V7.G2","V8.G2")...),...)
+#' test<-mfa(ndatas,sets=list(c("V1","V2","V3","V4","V5","V6"),
+#'                            c("V1.1","V2.1","V3.1","V4.1","V7","V8"),
+#'                            c("V1.2","V2.2","V3.2","V4.2","V9","V10"),
+#'                            c("V1.3","V2.3","V3.3","V4.3","V8.1"),
+#'                            c("V1.4","V2.4","V3.4","V4.4","V11","V12"),
+#'                            c("V1.5","V2.5","V3.5","V4.5","V13"),
+#'                            c("V1.6","V2.6","V3.6","V4.6"),
+#'                            c("V1.7","V2.7","V3.7","V4.7","V14","V5.1"),
+#'                            c("V1.8","V2.8","V3.8","V4.8","V15"),
+#'                            c("V1.9","V2.9","V3.9","V4.9")
+#'                            ),scale = F, center = F)
 
 
 
@@ -65,6 +84,25 @@ mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
   data<-as.matrix(data)
   if(!is.numeric(data)) {stop("data should be numeric matrix or data.frame")}
   
+  #check center and scale
+  if(!is.logical(center)&& !(is.numeric(center) && (length(center) == ncol(data)))) {
+    stop("center should be either a logical value or a numeric vector of length equal to the number of columns of 'data'")
+  }
+  if(!is.logical(scale)&& !(is.numeric(scale) && (length(scale) == ncol(data)))) {
+    stop("scale should be either a logical value or a numeric vector of length equal to the number of columns of 'data'")
+  }
+  if(!is.logical(scale)&&any(scale==0)) {stop("scale vector can't contain zero values.")}
+  
+  #check sets
+  check_sets<-NULL
+  for (i in 1:length(sets)) {
+    check_sets<-c(check_sets,sets[[i]])
+  }
+  if(length(check_sets)!=ncol(data)) {stop("The sum of sets lengths does not equal to the number of columns.")}
+  if(identical(1:ncol(data),check_sets)) {warning("sets contain some overlapped and skipped columns.")}
+  
+  
+   
   datarownames<-row.names(data)
   
   # scale and center
@@ -73,7 +111,7 @@ mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
   # check singularity and ncomps
   rank<-Matrix::rankMatrix(data)[1]
   if (!is.null(ncomps)){
-    if(ncomps<=0|ncomps%%1!=0) {
+    if(ncomps<=0||ncomps%%1!=0) {
       stop("ncomps should be positive integer.")
     }
     if ((ncomps)>rank){
