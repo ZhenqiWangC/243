@@ -94,14 +94,31 @@ mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
   if(!is.logical(scale)&&any(scale==0)) {stop("scale vector can't contain zero values.")}
   
   #check sets
-  check_sets<-NULL
-  for (i in 1:length(sets)) {
-    check_sets<-c(check_sets,sets[[i]])
+  if(is.numeric(sets[[1]])){
+    check_sets<-NULL
+    for (i in 1:length(sets)) {
+      if(!is.numeric(sets[[i]])) {stop("sets should be a list of numeric vectors or character vectors.")}
+      check_sets<-c(check_sets,sets[[i]])
+    }
+    if(length(check_sets)!=ncol(data)) {stop("The sum of sets lengths does not equal to the number of columns.")}
+    if(any(!check_sets%in%1:ncol(data))) {stop("sets out of bounds")}
+    if(!identical(1:ncol(data),check_sets)) {warning("sets contain some overlapped and skipped columns.")}
+  }else{
+    if(is.character(sets[[1]])){
+      check_sets<-NULL
+      check_names<-NULL
+      for (i in 1:length(sets)){
+        if(!is.character(sets[[i]])) {stop("sets should be a list of character vectors or numeric vectors.")}
+        if(any(!sets[[i]]%in%colnames(data))) {stop("sets contain wrong variable names.")}
+        check_names<-c(check_names,sets[[i]])
+        check_sets<-c(check_sets,c(which(colnames(data)==sets[[i]][1]):which(colnames(data)==sets[[i]][length(sets[[i]])])))
+      }
+      if(length(check_sets)!=ncol(data)) {stop("The sum of sets lengths does not equal to the number of columns, or the variable names are in the wrong order.")}
+      if(!identical(colnames(data),check_names)) {warning("sets contain some overlapped and skipped columns.")}
+    }else{
+      stop("sets should be a list of numeric vectors or character vectors.")
+    }
   }
-  if(length(check_sets)!=ncol(data)) {stop("The sum of sets lengths does not equal to the number of columns.")}
-  if(any(!check_sets%in%1:ncol(data))) {stop("sets out of bounds")}
-  if(!identical(1:ncol(data),check_sets)) {warning("sets contain some overlapped and skipped columns.")}
-
   
    
   datarownames<-row.names(data)
