@@ -1,0 +1,2 @@
+load("/Users/Lee/243Project/MFA/data/wine.rda")
+load("/Users/Lee/243Project/MFA/data/wine.rds")
