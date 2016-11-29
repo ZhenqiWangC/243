@@ -1,0 +1,24 @@
+---
+title: "An Overview of the MFA package"
+author:
+vignette: >
+  %\VignetteIndexEntry{MFA}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+\fontsize{12}{12}
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(collapse = T, comment = "#>")
+options(tibble.print_min = 4L, tibble.print_max = 4L)
+library(MFA)
+```
+
+This vignette gives an introduction to the model Multiple Factor Analysis and an overview the package MFA developed to apply the model on data. You might find reading this entire vignette helpful to get a broad understanding of what can be done in R using the MFA. 
+## 1 Introdution to Multiple Factor Analysis
+## 2 Step by step tutorial
+## 2.1 Getting started
+To run any of the MFA functions, it is necessary to make the package active by using the library command:
+```{r,echo=F}
+library(MFA)
+```
+It is required that the data we apply MFA functions on is organized in a certain 

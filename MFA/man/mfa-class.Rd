@@ -9,18 +9,30 @@
 mfa(data, sets, ncomps = NULL, center = TRUE, scale = TRUE)
 }
 \arguments{
-\item{data}{could be a matrix or a data.frame, should be in the same order of sets}
+\item{data}{could be a numeric matrix or data.frame, should be in the same order of sets}
 
 \item{sets}{list of vector contains vector of indices or variable names of each group}
 
-\item{ncomps}{integer indicating how many number of components are to be extracted}
+\item{ncomps}{positive integer indicating how many number of components are to be extracted}
 
 \item{center}{either a logical value or a numeric vector of length equal to the number of active variables in the analysis}
 
 \item{scale}{either a logical value or a numeric vector of length equal to the number of active variables in the analysis}
 }
 \value{
-an object of class mfa
+an object of class \code{"mfa"} with the following elements:
+
+\item{sets}{list of sets}
+
+\item{weights}{vector of weights}
+
+\item{eigenvalues}{vector of eigenvalues}
+
+\item{common_factor_score}{matrix of common factor scores}
+
+\item{partial_factor_score}{list of matrix of partial factor scores}
+
+\item{loadings}{matrix of loadings}
 }
 \description{
 Class \code{mfa} defines a mfa model
@@ -32,7 +44,6 @@ Constructor method of mfa Class.
 }
 \examples{
 # default
-
 test<-mfa(wine_data,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53))
 
 # use your own scale method
@@ -47,6 +58,5 @@ test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50
 test<-mfa(ndatas,sets=list(c("V1.G1","V6.G1"),c("V1.G2","V8.G2")...),...)
 # or use the full list of variable names of each group:
 test<-mfa(ndatas,sets=list(c("V1.G1","V2.G1","V3.G1","V4.G1","V5.G1","V6.G1"),c("V1.G2","V2.G2","V3.G2","V4.G2","V7.G2","V8.G2")...),...)
-# only center or only scale
 }
 

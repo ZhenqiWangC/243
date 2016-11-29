@@ -8,7 +8,9 @@ Depends:
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Suggests: knitr, rmarkdown
+Suggests:
+    knitr,
+    rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 Collate:
@@ -19,6 +21,7 @@ Collate:
     'mfa.r'
     'bootstrap.r'
     'contributions.r'
+    'data.r'
     'eigenvalues.r'
     'plot.r'
     'print.r'
