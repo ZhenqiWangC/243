@@ -1,12 +1,26 @@
 #' @include mfa.r
-#' Method contributions.
-#' @title contributions method
-#' @param object an mfa object
+#' @title Contributions
+#' @description Returns a list of tables with contribution informations.
+#' @param object an \code{mfa} object
+#' @return A list of tables:
+#' @return \item{observations}{contribution of each observation to each dimension} 
+#' @return \item{variables}{contribution of each variable to each dimension} 
+#' @return \item{table}{contribution of each table to each dimension} 
 #' @export
+#' @example 
+#' 
 setGeneric("contributions",function(object)standardGeneric("contributions"))
 
-
+#' @title Contributions Method for \code{mfa} Object
+#' @description Returns a list of tables with contribution informations.
+#' @param object an \code{mfa} object
+#' @return A list of tables:
+#' @return \item{observations}{contribution of each observation to each dimension} 
+#' @return \item{variables}{contribution of each variable to each dimension} 
+#' @return \item{table}{contribution of each table to each dimension} 
 #' @export
+#' @example 
+#' 
 # set contributions() to take 'mfa' and return a matrix of contributions
 
 setMethod("contributions",

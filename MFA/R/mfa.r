@@ -22,7 +22,7 @@ loadings="matrix")
 #' @name mfa
 #' @rdname mfa-class
 #' @title MFA
-#' @description Creates an object of class \code{"mfa"}
+#' @description Creates an object of class \code{"mfa"}.
 #' @param data could be a numeric matrix or data.frame, should be in the same order of sets
 #' @param sets list of vector contains vector of indices or variable names of each group
 #' @param ncomps positive integer indicating how many number of components are to be extracted
