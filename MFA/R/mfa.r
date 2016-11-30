@@ -80,7 +80,6 @@ loadings="matrix")
 # eg. sets=c(1:3,4:5), means the 1:3 columns of data is Group 1 and the next 4:5 columns is Group2
 # center and scale: the same parameters as in the function scale(), logical values or a numeric vector
 mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
-<<<<<<< HEAD
   #check numeric data
   data<-as.matrix(data)
   if(!is.numeric(data)) {stop("data should be numeric matrix or data.frame")}
