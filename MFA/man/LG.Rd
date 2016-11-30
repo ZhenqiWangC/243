@@ -18,7 +18,7 @@ a value of Lg coefficient between two tables
 Return a value of Lg coefficient between two tables
 }
 \examples{
-# default 
+# default
 x1 <- scale(wine_data[,1:6])
 x2 <- scale(wine_data[,7:12])
 LG(x1,x2)

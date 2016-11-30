@@ -18,7 +18,7 @@ a table of Lg coefficients
 Return a table of Lg coefficients between any two subsets of a normalized dataset
 }
 \examples{
-# default 
+# default
 nadtas <- scale(wine_data)
 LG_table(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53))
 }
