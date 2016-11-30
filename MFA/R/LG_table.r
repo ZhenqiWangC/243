@@ -12,13 +12,13 @@
 
 LG_table <- function(dataset,sets){
   if(!is.data.frame(dataset)&!is.matrix(dataset)){stop("dataset must be a matrix or a dataframe")}
-    LG <- matrix(NA,length(sets),length(sets))
+    Table <- matrix(NA,length(sets),length(sets))
     for(i in 1:length(sets)){
       for(j in i:length(sets)){
         lg <- LG(as.matrix(dataset[,sets[[i]]]),as.matrix(dataset[,sets[[j]]]))
-        LG[i,j] <- lg
-        LG[j,i] <- lg
+        Table[i,j] <- lg
+        Table[j,i] <- lg
       }
     }
-    LG
+    Table
 }
