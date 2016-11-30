@@ -29,64 +29,65 @@ partial_plot<-function(group_num,data,data2,names){
 #' @description Returns plots of eigenvalues, compromise factor scores and partial factor score
 #' @param x a R object of mfa
 #' @param dim a integer vector of two values
+#' @param singleoutput a character value among ('eig','com','par') indicating which graph to output
 #' @export
 
 setMethod("plot",signature="mfa",
-       function(x,dim){
-         blankPlot <- ggplot2::ggplot()+ggplot2::geom_blank(ggplot2::aes(1,1))+
-           ggplot2::theme(
-             plot.background = ggplot2::element_blank(),
-             panel.grid.major = ggplot2::element_blank(),
-             panel.grid.minor = ggplot2::element_blank(),
-             panel.border = ggplot2::element_blank(),
-             panel.background = ggplot2::element_blank(),
-             axis.title.x = ggplot2::element_blank(),
-             axis.title.y = ggplot2::element_blank(),
-             axis.text.x = ggplot2::element_blank(),
-             axis.text.y = ggplot2::element_blank(),
-             axis.ticks = ggplot2::element_blank(),
-             axis.line = ggplot2::element_blank()
-           )
-         
-           sets<-x@sets
-# if sets is character: turn sets into indicies acccording to rownames of data
-if (!is.numeric(sets[[1]])){
-  newlist<-list()
-  for (i in 1:length(sets)){
-  newlist[[i]]<-c(which(rownames(x@loadings)==sets[[i]][1]):which(rownames(x@loadings)==sets[[i]][length(sets[[i]])]))
-  }
-sets<-newlist
-}
-           names<-sapply(dim,function(x){paste0("Dim",x)})
-           partial<-lapply(test@partial_factor_score,function(x){x[,dim]})
-           compromise<-data.frame(x@common_factor_score[,dim])
-           loadings<--data.frame(x@loadings[,dim])
-           eigen<-data.frame("eigen"=x@eigenvalues)
-           eigen$id<-sapply(c(1:length(x@eigenvalues)),function(x){paste0("Dim",x)})
+          function(x,dim,singleoutput=NULL){
+            blankPlot <- ggplot2::ggplot()+ggplot2::geom_blank(ggplot2::aes(1,1))+
+              ggplot2::theme(
+                plot.background = ggplot2::element_blank(),
+                panel.grid.major = ggplot2::element_blank(),
+                panel.grid.minor = ggplot2::element_blank(),
+                panel.border = ggplot2::element_blank(),
+                panel.background = ggplot2::element_blank(),
+                axis.title.x = ggplot2::element_blank(),
+                axis.title.y = ggplot2::element_blank(),
+                axis.text.x = ggplot2::element_blank(),
+                axis.text.y = ggplot2::element_blank(),
+                axis.ticks = ggplot2::element_blank(),
+                axis.line = ggplot2::element_blank()
+              )
 
-           # rescale loading to singular value
+            sets<-x@sets
+            # if sets is character: turn sets into indicies acccording to rownames of data
+            if (!is.numeric(sets[[1]])){
+              newlist<-list()
+              for (i in 1:length(sets)){
+                newlist[[i]]<-c(which(rownames(x@loadings)==sets[[i]][1]):which(rownames(x@loadings)==sets[[i]][length(sets[[i]])]))
+              }
+              sets<-newlist
+            }
+            names<-sapply(dim,function(x){paste0("Dim",x)})
+            partial<-lapply(x@partial_factor_score,function(x){x[,dim]})
+            compromise<-data.frame(x@common_factor_score[,dim])
+            loadings<--data.frame(x@loadings[,dim])
+            eigen<-data.frame("eigen"=x@eigenvalues)
+            eigen$id<-sapply(c(1:length(x@eigenvalues)),function(x){paste0("Dim",x)})
 
-           loadings[,1]<-loadings[,1]*(sqrt(x@eigenvalues[1])/sd(loadings[,1]))
-           loadings[,2]<-loadings[,2]*(sqrt(x@eigenvalues[2])/sd(loadings[,2]))
-    
-           compromise$id<-rownames(compromise)
-           loadings$id<-rownames(loadings)
+            # rescale loading to singular value
 
-           # group lable for loadings
-           group<-c(rep(0,length(compromise[,1])))
-           for (i in 1:length(sets)){
+            loadings[,1]<-loadings[,1]*(sqrt(x@eigenvalues[1])/sd(loadings[,1]))
+            loadings[,2]<-loadings[,2]*(sqrt(x@eigenvalues[2])/sd(loadings[,2]))
+
+            compromise$id<-rownames(compromise)
+            loadings$id<-rownames(loadings)
+
+            # group lable for loadings
+            group<-c(rep(0,length(compromise[,1])))
+            for (i in 1:length(sets)){
               group[sets[[i]]]<-paste0("Group",i)
-           }
-           loadings$group<-factor(group, levels = unique(group))
+            }
+            loadings$group<-factor(group, levels = unique(group))
 
-           # plot compromise factor score of the two dimension ##############
-           p1<-ggplot2::ggplot()+
+            # plot compromise factor score of the two dimension ##############
+            p1<-ggplot2::ggplot()+
               ggplot2::geom_point(data=compromise,ggplot2::aes(x=compromise[,1],y=compromise[,2],color=id),size=3)+
               ggplot2::theme(plot.title = ggplot2::element_text(size=10, face="bold",vjust=1,color="grey40"),
-                              axis.title.x = ggplot2::element_text(size=8, face="bold",vjust=-0.5,color="grey40"),
-                              axis.title.y = ggplot2::element_text(size=8, face="bold",vjust=0.5,color="grey40"),
-                              legend.title=ggplot2::element_blank(),
-                              panel.background = ggplot2::element_blank(),
+                             axis.title.x = ggplot2::element_text(size=8, face="bold",vjust=-0.5,color="grey40"),
+                             axis.title.y = ggplot2::element_text(size=8, face="bold",vjust=0.5,color="grey40"),
+                             legend.title=ggplot2::element_blank(),
+                             panel.background = ggplot2::element_blank(),
                              panel.grid.minor = ggplot2::element_line(colour = "grey90",size=0.2),
                              panel.grid.major = ggplot2::element_line(colour = "grey90",size=0.2),
                              legend.text=ggplot2::element_text(size=8))+
@@ -102,24 +103,24 @@ sets<-newlist
 
 
 
-           # plot barchart for eigenvalues
-          p2<-ggplot2::ggplot(data=eigen,ggplot2::aes(x=factor(id,levels=id),y=eigen,fill=factor(id,levels=id)))+
+            # plot barchart for eigenvalues
+            p2<-ggplot2::ggplot(data=eigen,ggplot2::aes(x=factor(id,levels=id),y=eigen,fill=factor(id,levels=id)))+
               ggplot2::geom_bar(stat="identity",width=0.5)+
               ggthemes::scale_fill_calc()+
               ggplot2::theme(plot.title = ggplot2::element_text(size=10, face="bold",vjust=1,color="grey40"),
-                           axis.title.x = ggplot2::element_text(size=6, face="bold",vjust=-0.5,color="grey40"),
-                           axis.title.y = ggplot2::element_text(size=8, face="bold",vjust=0.5,color="grey40"),
-                           legend.title=ggplot2::element_blank(),
-                           panel.background = ggplot2::element_blank(),
-                           panel.grid.minor = ggplot2::element_line(colour = "grey90",size=0.2),
-                           panel.grid.major = ggplot2::element_line(colour = "grey90",size=0.2),
-                           axis.text.x = ggplot2::element_text(color="grey40",size=6),
-                           axis.text.y = ggplot2::element_text(color="grey40",size=8),
-                           legend.text=ggplot2::element_text(size=8))+
+                             axis.title.x = ggplot2::element_text(size=6, face="bold",vjust=-0.5,color="grey40"),
+                             axis.title.y = ggplot2::element_text(size=8, face="bold",vjust=0.5,color="grey40"),
+                             legend.title=ggplot2::element_blank(),
+                             panel.background = ggplot2::element_blank(),
+                             panel.grid.minor = ggplot2::element_line(colour = "grey90",size=0.2),
+                             panel.grid.major = ggplot2::element_line(colour = "grey90",size=0.2),
+                             axis.text.x = ggplot2::element_text(color="grey40",size=6),
+                             axis.text.y = ggplot2::element_text(color="grey40",size=8),
+                             legend.text=ggplot2::element_text(size=8))+
               ggplot2::ggtitle(paste0("Eigenvalues"))+ggplot2::labs(x="",y="")+
               ggplot2::guides(fill = ggplot2::guide_legend(keywidth = 0.9, keyheight = 0.9))
 
-          # plot partial factor score
+            # plot partial factor score
             plist <- list()
             for (i in 1:length(sets)){
               data<-data.frame(partial[[i]])
@@ -130,12 +131,14 @@ sets<-newlist
               plot<-partial_plot(i,data,data2,names)
               plist[[i]]<-plot
             }
-         
-         # arrange output
-            if (length(sets)==10){
+
+
+            # arrange output
+            if (is.null(singleoutput)){
               p3<-do.call(get("grid.arrange", asNamespace("gridExtra")),c(plist,ncol=5,top=""))
+            if (length(sets)==10){
               p<-gridExtra::grid.arrange(blankPlot,p1,p2,p3,ncol=6, nrow=2, widths=c(1,1,1,1,1,1), heights=c(3, 6),layout_matrix = rbind(c(1,3,3,2,2,1), c(4,4,4,4,4,4)))
-              
+
               jpeg("mfa.jpeg", width = 14, height = 9, units = 'in', res = 1000)
               gridExtra::grid.arrange(blankPlot,p1,p2,p3,ncol=6, nrow=2, widths=c(1,1,1,1,1,1), heights=c(3, 6),layout_matrix = rbind(c(1,3,3,2,2,1), c(4,4,4,4,4,4)))
               dev.off()
@@ -149,5 +152,29 @@ sets<-newlist
             print(p)
             cat(" 'mfa.jpeg' is saved in the current folder")
             }
+            }else{
 
-       })
+            if (singleoutput=='eig'){
+              jpeg("mfa.jpeg", width = 5, height = 5, units = 'in', res = 1000)
+              gridExtra::grid.arrange(p2,ncol=1)
+              dev.off()
+              print(p2)
+              cat(" 'mfa.jpeg' is saved in the current folder")
+            }
+              if (singleoutput=='com'){
+                jpeg("mfa.jpeg", width = 5, height = 5, units = 'in', res = 1000)
+                gridExtra::grid.arrange(p1,ncol=1)
+                dev.off()
+                print(p1)
+                cat(" 'mfa.jpeg' is saved in the current folder")
+              }
+              if (singleoutput=='pat'){
+                jpeg("mfa.jpeg", width = 14, height = 9, units = 'in', res = 1000)
+                do.call(get("grid.arrange", asNamespace("gridExtra")),c(plist,ncol=5,top=""))
+                dev.off()
+                print(p3<-do.call(get("grid.arrange", asNamespace("gridExtra")),c(plist,ncol=5,top="")))
+                cat(" 'mfa.jpeg' is saved in the current folder")
+
+            }}
+
+          })

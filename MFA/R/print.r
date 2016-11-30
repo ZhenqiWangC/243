@@ -1,3 +1,7 @@
+#'Pringting MFAs
+#'
+#' @title Pringting calss mfa
+
 #' @export
 
 # set print() to print basic infomation

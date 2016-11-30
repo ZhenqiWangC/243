@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content />
+
+
+<title>An Overview of the MFA package</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">An Overview of the MFA package</h1>
+
+
+
+<p></p>
+<p>This vignette gives an introduction to the model Multiple Factor Analysis and an overview the package MFA developed to apply the model on data. You might find reading this entire vignette helpful to get a broad understanding of what can be done in R using the MFA.</p>
+<div id="sec:line-type-spec" class="section level2">
+<h2>1 Introdution to Multiple Factor Analysis</h2>
+</div>
+<div id="step-by-step-tutorial" class="section level2">
+<h2>2 Step by step tutorial</h2>
+<p>We are using a data example included in the package MFA to illustrate the use of the MFA package step by step. This data example concerns 12 wines from three wine regions and ten expert assessors were asked to evaluate these wines on 9-point rating scales, using four standard variables plus extra variables if any aseessor feels necessary.</p>
+</div>
+<div id="getting-started" class="section level2">
+<h2>2.1 Getting started</h2>
+<p>To run any of the MFA functions, it is necessary to make the package active by using the library command:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(MFA)</code></pre></div>
+<p>The data on which we apply MFA functions should be either data frame or matrix object in R. The users could of course read data from a local file and here are of course many ways to enter data into R, just make sure prepare the data to be analyzed as data frame or matrix. The data example ‘wine’ has been loaded in the global environment in R when loading the MFA package, we can use head( ) to check the ‘wine’ data. As the data example is of many variables, we will choose the first 12 to show:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(wine)[,<span class="dv">1</span>:<span class="dv">12</span>]
+<span class="co">#&gt;           V1.G1       V2.G1       V3.G1      V4.G1      V5.G1       V6.G1</span>
+<span class="co">#&gt; NZ1  0.29576024  0.32274861  0.17712298 -0.0894825 -0.4412488  0.27129499</span>
+<span class="co">#&gt; NZ2  0.15925551  0.12909944  0.30996521 -0.4474125 -0.3054799  0.56725317</span>
+<span class="co">#&gt; NZ3  0.02275079  0.12909944  0.04428074  0.0298275 -0.1697111 -0.02466318</span>
+<span class="co">#&gt; NZ4  0.43226497  0.32274861  0.30996521 -0.0894825 -0.1697111  0.12331591</span>
+<span class="co">#&gt; FR1 -0.52326812 -0.45184806 -0.48708819  0.3877575  0.3733643 -0.17264227</span>
+<span class="co">#&gt; FR2 -0.38676339 -0.06454972 -0.22140372  0.5070675  0.2375955 -0.46860044</span>
+<span class="co">#&gt;           V1.G2      V2.G2       V3.G2       V4.G2       V7.G2       V8.G2</span>
+<span class="co">#&gt; NZ1  0.34553204  0.3461992  0.27235239 -0.33395730  0.23316128 -0.09284767</span>
+<span class="co">#&gt; NZ2  0.05957449  0.1275471  0.03026138 -0.33395730  0.23316128  0.27854301</span>
+<span class="co">#&gt; NZ3  0.05957449  0.3461992  0.03026138 -0.01335829  0.39774572  0.27854301</span>
+<span class="co">#&gt; NZ4  0.34553204  0.3461992  0.27235239 -0.17365780  0.06857685  0.09284767</span>
+<span class="co">#&gt; FR1 -0.51234061 -0.3097572 -0.57496616  0.30724072 -0.26059202 -0.46423835</span>
+<span class="co">#&gt; FR2 -0.22638306 -0.3097572 -0.21182964  0.62783973 -0.42517646 -0.09284767</span></code></pre></div>
+<p>It is required that the data on which we apply MFA functions is organized in certain way that the functions could separate each group by the arrangement of the columns of the input data, as shown in the data example ‘wine’, the variables of each group are stacked together and one group after another, like the first 6 columns are in Group 1 and the next 6 columns are in Group2, and so on:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colnames</span>(wine)
+<span class="co">#&gt;  [1] &quot;V1.G1&quot;  &quot;V2.G1&quot;  &quot;V3.G1&quot;  &quot;V4.G1&quot;  &quot;V5.G1&quot;  &quot;V6.G1&quot;  &quot;V1.G2&quot; </span>
+<span class="co">#&gt;  [8] &quot;V2.G2&quot;  &quot;V3.G2&quot;  &quot;V4.G2&quot;  &quot;V7.G2&quot;  &quot;V8.G2&quot;  &quot;V1.G3&quot;  &quot;V2.G3&quot; </span>
+<span class="co">#&gt; [15] &quot;V3.G3&quot;  &quot;V4.G3&quot;  &quot;V9.G3&quot;  &quot;V10.G3&quot; &quot;V1.G4&quot;  &quot;V2.G4&quot;  &quot;V3.G4&quot; </span>
+<span class="co">#&gt; [22] &quot;V4.G4&quot;  &quot;V8.G4&quot;  &quot;V1.G5&quot;  &quot;V2.G5&quot;  &quot;V3.G5&quot;  &quot;V4.G5&quot;  &quot;V11.G5&quot;</span>
+<span class="co">#&gt; [29] &quot;V12.G5&quot; &quot;V1.G6&quot;  &quot;V2.G6&quot;  &quot;V3.G6&quot;  &quot;V4.G6&quot;  &quot;V13.G6&quot; &quot;V1.G7&quot; </span>
+<span class="co">#&gt; [36] &quot;V2.G7&quot;  &quot;V3.G7&quot;  &quot;V4.G7&quot;  &quot;V1.G8&quot;  &quot;V2.G8&quot;  &quot;V3.G8&quot;  &quot;V4.G8&quot; </span>
+<span class="co">#&gt; [43] &quot;V14.G8&quot; &quot;V5.G8&quot;  &quot;V1.G9&quot;  &quot;V2.G9&quot;  &quot;V3.G9&quot;  &quot;V4.G9&quot;  &quot;V15.G9&quot;</span>
+<span class="co">#&gt; [50] &quot;V1.G10&quot; &quot;V2.G10&quot; &quot;V3.G10&quot; &quot;V4.G10&quot;</span></code></pre></div>
+<p>It’s also recommended that the input data has row names and columns names for more readable outputs of the MFA functions. ## 2.2 mfa</p>
+<pre><code>#&gt; Matrix is singular: outputing 11 dimensions.
+#&gt; Warning in sqrt(lambda): NaNs produced
+
+#&gt; Warning in sqrt(lambda): NaNs produced</code></pre>
+</div>
+<div id="print" class="section level2">
+<h2>2.3 print()</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(mfa_wine)
+<span class="co">#&gt; There are 11 components. </span>
+<span class="co">#&gt; The eigenvalue of the first component is:  0.7702551 </span>
+<span class="co">#&gt; The eigenvalue of the second component is:  0.1229254</span></code></pre></div>
+</div>
+<div id="plot" class="section level2">
+<h2>2.4 plot()</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(mfa_wine,<span class="dt">dim=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="dt">singleoutput=</span><span class="st">'eig'</span>)
+<span class="co">#&gt;  'mfa.jpeg' is saved in the current folder</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(mfa_wine,<span class="dt">dim=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="dt">singleoutput=</span><span class="st">'com'</span>)
+<span class="co">#&gt;  'mfa.jpeg' is saved in the current folder</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(mfa_wine,<span class="dt">dim=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),<span class="dt">singleoutput=</span><span class="st">'pat'</span>)
+<span class="co">#&gt; TableGrob (3 x 5) &quot;arrange&quot;: 11 grobs</span>
+<span class="co">#&gt;     z     cells    name                  grob</span>
+<span class="co">#&gt; 1   1 (2-2,1-1) arrange        gtable[layout]</span>
+<span class="co">#&gt; 2   2 (2-2,2-2) arrange        gtable[layout]</span>
+<span class="co">#&gt; 3   3 (2-2,3-3) arrange        gtable[layout]</span>
+<span class="co">#&gt; 4   4 (2-2,4-4) arrange        gtable[layout]</span>
+<span class="co">#&gt; 5   5 (2-2,5-5) arrange        gtable[layout]</span>
+<span class="co">#&gt; 6   6 (3-3,1-1) arrange        gtable[layout]</span>
+<span class="co">#&gt; 7   7 (3-3,2-2) arrange        gtable[layout]</span>
+<span class="co">#&gt; 8   8 (3-3,3-3) arrange        gtable[layout]</span>
+<span class="co">#&gt; 9   9 (3-3,4-4) arrange        gtable[layout]</span>
+<span class="co">#&gt; 10 10 (3-3,5-5) arrange        gtable[layout]</span>
+<span class="co">#&gt; 11 11 (1-1,1-5) arrange text[GRID.text.17647]</span>
+<span class="co">#&gt;  'mfa.jpeg' is saved in the current folder</span></code></pre></div>
+</div>
+<div id="eigenvalues" class="section level2">
+<h2>2.5 eigenvalues()</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">eigenvalues</span>(mfa_wine)
+<span class="co">#&gt;                               1          2           3           4</span>
+<span class="co">#&gt; Singular value        0.8776418  0.3506073  0.30118188  0.27570882</span>
+<span class="co">#&gt; Eigenvalue            0.7702551  0.1229254  0.09071052  0.07601535</span>
+<span class="co">#&gt; Cumulative            0.7702551  0.8931806  0.98389110  1.05990645</span>
+<span class="co">#&gt; % Inertia            61.2296749  9.7716778  7.21082608  6.04266702</span>
+<span class="co">#&gt; Cumulative % Inertia 61.2296749 71.0013527 78.21217882 84.25484584</span>
+<span class="co">#&gt;                                5           6           7           8</span>
+<span class="co">#&gt; Singular value        0.24413253  0.19799790  0.17581135  0.15798257</span>
+<span class="co">#&gt; Eigenvalue            0.05960069  0.03920317  0.03090963  0.02495849</span>
+<span class="co">#&gt; Cumulative            1.11950714  1.15871031  1.18961994  1.21457843</span>
+<span class="co">#&gt; % Inertia             4.73782113  3.11636657  2.45709049  1.98401852</span>
+<span class="co">#&gt; Cumulative % Inertia 88.99266698 92.10903355 94.56612404 96.55014256</span>
+<span class="co">#&gt;                                9          10           11</span>
+<span class="co">#&gt; Singular value        0.13660609  0.11592003   0.10630019</span>
+<span class="co">#&gt; Eigenvalue            0.01866122  0.01343745   0.01129973</span>
+<span class="co">#&gt; Cumulative            1.23323966  1.24667711   1.25797684</span>
+<span class="co">#&gt; % Inertia             1.48343143  1.06817972   0.89824629</span>
+<span class="co">#&gt; Cumulative % Inertia 98.03357399 99.10175371 100.00000000</span></code></pre></div>
+</div>
+<div id="contributions" class="section level2">
+<h2>2.6 contributions()</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">contributions</span>(mfa_wine)
+<span class="co">#&gt; $observations</span>
+<span class="co">#&gt;             Dim1        Dim2         Dim3         Dim4         Dim5</span>
+<span class="co">#&gt; NZ1 0.1039486000 0.018067938 7.374457e-04 1.657668e-02 2.699906e-02</span>
+<span class="co">#&gt; NZ2 0.0707842116 0.000721502 2.405538e-02 1.557036e-01 5.670238e-02</span>
+<span class="co">#&gt; NZ3 0.0626556339 0.139844827 2.962285e-05 1.987071e-02 5.273309e-03</span>
+<span class="co">#&gt; NZ4 0.1344996531 0.018649686 4.594301e-02 3.526319e-01 5.410132e-05</span>
+<span class="co">#&gt; FR1 0.2038784809 0.011174582 1.359268e-02 1.093328e-01 7.310017e-02</span>
+<span class="co">#&gt; FR2 0.1728577563 0.007927234 1.258383e-01 8.432441e-03 2.389948e-01</span>
+<span class="co">#&gt; FR3 0.0706823155 0.028397259 5.888572e-02 8.017449e-03 8.574898e-02</span>
+<span class="co">#&gt; FR4 0.0926379624 0.112711812 1.324628e-01 7.660542e-02 3.566700e-01</span>
+<span class="co">#&gt; CA1 0.0484146088 0.092067334 1.723304e-01 1.282689e-01 8.563466e-02</span>
+<span class="co">#&gt; CA2 0.0005790799 0.388253590 1.902349e-03 1.671523e-05 2.601753e-03</span>
+<span class="co">#&gt; CA3 0.0245243020 0.178244477 1.472878e-01 3.307611e-02 6.601328e-02</span>
+<span class="co">#&gt; CA4 0.0145373955 0.003939760 2.769345e-01 9.146721e-02 2.207535e-03</span>
+<span class="co">#&gt;            Dim6         Dim7         Dim8         Dim9        Dim10</span>
+<span class="co">#&gt; NZ1 0.100585298 1.305490e-01 0.2424539758 0.2132057536 0.0372234198</span>
+<span class="co">#&gt; NZ2 0.039156674 5.897795e-02 0.0023252487 0.2177027530 0.0953502916</span>
+<span class="co">#&gt; NZ3 0.010761200 2.104649e-01 0.0031983484 0.1016631885 0.0004549942</span>
+<span class="co">#&gt; NZ4 0.193263910 1.328493e-05 0.0003920536 0.0042006009 0.0858476993</span>
+<span class="co">#&gt; FR1 0.009217876 5.140075e-02 0.0198031710 0.0296402576 0.3294723349</span>
+<span class="co">#&gt; FR2 0.034549463 6.620561e-02 0.0255354663 0.1277000443 0.0327371938</span>
+<span class="co">#&gt; FR3 0.385860277 5.798179e-03 0.0289350643 0.0955900422 0.0935762430</span>
+<span class="co">#&gt; FR4 0.002309626 9.249690e-03 0.0189637618 0.0024287699 0.0564145818</span>
+<span class="co">#&gt; CA1 0.013141049 1.687554e-01 0.0006772694 0.0003230936 0.1507643726</span>
+<span class="co">#&gt; CA2 0.065104905 1.346061e-01 0.1082923668 0.1481499319 0.0671349512</span>
+<span class="co">#&gt; CA3 0.057951295 5.172917e-02 0.3554826020 0.0005682959 0.0002787423</span>
+<span class="co">#&gt; CA4 0.088098426 1.122500e-01 0.1939406720 0.0588272686 0.0507451756</span>
+<span class="co">#&gt;            Dim11</span>
+<span class="co">#&gt; NZ1 2.631948e-02</span>
+<span class="co">#&gt; NZ2 1.951867e-01</span>
+<span class="co">#&gt; NZ3 3.624499e-01</span>
+<span class="co">#&gt; NZ4 8.117073e-02</span>
+<span class="co">#&gt; FR1 6.605352e-02</span>
+<span class="co">#&gt; FR2 7.588836e-02</span>
+<span class="co">#&gt; FR3 5.517513e-02</span>
+<span class="co">#&gt; FR4 5.621233e-02</span>
+<span class="co">#&gt; CA1 5.628960e-02</span>
+<span class="co">#&gt; CA2 2.496628e-05</span>
+<span class="co">#&gt; CA3 1.510551e-03</span>
+<span class="co">#&gt; CA4 2.371872e-02</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $variables</span>
+<span class="co">#&gt;               Dim1         Dim2         Dim3         Dim4         Dim5</span>
+<span class="co">#&gt; V1.G1  0.020885090 0.0244127525 4.351826e-04 8.871800e-03 1.100520e-03</span>
+<span class="co">#&gt; V2.G1  0.017122101 0.0148423670 1.930729e-02 1.874702e-03 3.043304e-02</span>
+<span class="co">#&gt; V3.G1  0.016287021 0.0377705750 1.884326e-03 1.726045e-03 9.659911e-03</span>
+<span class="co">#&gt; V4.G1  0.014010101 0.0081261629 6.181339e-02 2.041258e-03 5.846193e-03</span>
+<span class="co">#&gt; V5.G1  0.019756090 0.0062486776 2.811455e-03 2.120095e-04 4.622255e-04</span>
+<span class="co">#&gt; V6.G1  0.013072286 0.0040016292 1.280065e-02 5.063508e-02 3.094352e-02</span>
+<span class="co">#&gt; V1.G2  0.021079519 0.0080134103 2.763309e-03 6.867745e-03 9.835239e-03</span>
+<span class="co">#&gt; V2.G2  0.020939521 0.0075537268 1.994180e-02 6.439551e-03 8.239318e-05</span>
+<span class="co">#&gt; V3.G2  0.017040115 0.0095515864 2.437205e-03 1.653317e-02 2.972905e-03</span>
+<span class="co">#&gt; V4.G2  0.015655787 0.0137863619 2.435465e-02 3.204497e-03 4.864185e-02</span>
+<span class="co">#&gt; V7.G2  0.013560667 0.0030622126 7.065834e-02 4.341725e-05 1.815584e-03</span>
+<span class="co">#&gt; V8.G2  0.011782231 0.0265269278 2.358734e-03 7.412057e-04 3.676674e-02</span>
+<span class="co">#&gt; V1.G3  0.025524942 0.0150179325 2.445732e-03 8.754529e-05 8.930748e-04</span>
+<span class="co">#&gt; V2.G3  0.005068117 0.0142660195 4.272999e-03 1.637905e-01 1.551687e-02</span>
+<span class="co">#&gt; V3.G3  0.018365896 0.0394752290 3.409273e-02 4.489221e-05 2.753952e-03</span>
+<span class="co">#&gt; V4.G3  0.011364582 0.0366475665 1.059494e-02 2.010513e-02 1.638713e-02</span>
+<span class="co">#&gt; V9.G3  0.021123891 0.0242895797 1.163661e-03 2.182389e-03 1.421911e-04</span>
+<span class="co">#&gt; V10.G3 0.019603689 0.0219940534 1.034726e-02 1.254095e-02 5.445809e-03</span>
+<span class="co">#&gt; V1.G4  0.026790671 0.0018387181 1.341747e-06 1.450463e-03 1.916794e-02</span>
+<span class="co">#&gt; V2.G4  0.018532210 0.0339969057 5.677031e-03 2.613182e-03 1.418493e-04</span>
+<span class="co">#&gt; V3.G4  0.025091414 0.0078068236 1.631172e-03 8.042431e-04 5.693853e-04</span>
+<span class="co">#&gt; V4.G4  0.014490456 0.0011734365 1.487415e-02 4.033540e-02 2.391496e-02</span>
+<span class="co">#&gt; V8.G4  0.011512654 0.0037654958 5.210892e-02 5.559325e-02 2.942651e-02</span>
+<span class="co">#&gt; V1.G5  0.026854877 0.0123396905 7.681577e-03 1.087997e-04 1.805900e-03</span>
+<span class="co">#&gt; V2.G5  0.013853603 0.0189701913 4.732450e-02 2.379816e-02 1.964127e-02</span>
+<span class="co">#&gt; V3.G5  0.022096088 0.0204039131 5.383677e-07 8.173006e-03 2.860123e-02</span>
+<span class="co">#&gt; V4.G5  0.004676222 0.0053026532 2.588361e-02 1.981125e-01 8.156290e-03</span>
+<span class="co">#&gt; V11.G5 0.020491117 0.0063688638 2.090290e-02 1.413983e-02 8.609712e-02</span>
+<span class="co">#&gt; V12.G5 0.009550818 0.0001130784 1.459415e-01 1.995919e-02 8.709969e-03</span>
+<span class="co">#&gt; V1.G6  0.027565988 0.0139754014 5.667185e-03 3.427476e-03 2.591875e-03</span>
+<span class="co">#&gt; V2.G6  0.023281793 0.0227699166 9.650806e-03 1.440768e-04 2.689674e-04</span>
+<span class="co">#&gt; V3.G6  0.021198041 0.0324511882 7.509490e-03 8.234647e-03 2.662535e-06</span>
+<span class="co">#&gt; V4.G6  0.016067858 0.0002814756 6.845436e-03 4.816517e-03 1.734157e-01</span>
+<span class="co">#&gt; V13.G6 0.012655924 0.0349714120 8.912846e-07 3.572233e-02 1.547459e-03</span>
+<span class="co">#&gt; V1.G7  0.031493009 0.0600888967 6.916971e-03 5.254016e-03 1.920726e-04</span>
+<span class="co">#&gt; V2.G7  0.025284619 0.0699727397 9.059298e-03 2.148534e-02 3.240342e-03</span>
+<span class="co">#&gt; V3.G7  0.031880875 0.0351069808 7.344733e-03 2.828525e-02 4.516965e-04</span>
+<span class="co">#&gt; V4.G7  0.013535705 0.0589274552 3.035675e-02 7.543387e-02 1.232605e-01</span>
+<span class="co">#&gt; V1.G8  0.020732071 0.0260526390 1.567400e-02 1.469899e-02 7.789599e-04</span>
+<span class="co">#&gt; V2.G8  0.016639111 0.0385486198 3.832909e-02 3.787266e-03 1.115915e-05</span>
+<span class="co">#&gt; V3.G8  0.015092809 0.0145855892 1.282926e-02 8.400544e-02 9.741165e-03</span>
+<span class="co">#&gt; V4.G8  0.005220090 0.0130133535 7.636791e-02 2.131136e-02 5.460859e-02</span>
+<span class="co">#&gt; V14.G8 0.022299225 0.0185071285 1.202109e-03 2.426456e-03 1.817916e-03</span>
+<span class="co">#&gt; V5.G8  0.015575938 0.0233935549 2.100278e-02 2.102466e-03 3.845403e-02</span>
+<span class="co">#&gt; V1.G9  0.024268879 0.0153339732 2.522062e-03 3.243063e-05 7.938074e-03</span>
+<span class="co">#&gt; V2.G9  0.014499905 0.0128868726 5.698975e-02 9.999938e-04 4.998755e-05</span>
+<span class="co">#&gt; V3.G9  0.021709664 0.0134312018 9.195271e-03 3.882075e-04 5.281280e-03</span>
+<span class="co">#&gt; V4.G9  0.016545543 0.0018325871 1.648480e-02 4.070905e-03 6.308922e-02</span>
+<span class="co">#&gt; V15.G9 0.023115940 0.0093334395 4.793585e-03 5.889328e-05 2.629481e-03</span>
+<span class="co">#&gt; V1.G10 0.032113559 0.0019888297 1.805443e-05 1.143256e-05 8.724607e-03</span>
+<span class="co">#&gt; V2.G10 0.023179258 0.0211923560 3.137193e-02 3.711862e-03 1.053254e-02</span>
+<span class="co">#&gt; V3.G10 0.025270059 0.0107862080 2.113367e-02 1.188224e-03 4.025151e-02</span>
+<span class="co">#&gt; V4.G10 0.024592358 0.0229016404 2.223261e-03 1.537267e-02 5.188629e-03</span>
+<span class="co">#&gt;                Dim6         Dim7         Dim8         Dim9        Dim10</span>
+<span class="co">#&gt; V1.G1  3.203160e-03 1.362863e-03 2.322032e-04 2.199673e-03 3.182750e-06</span>
+<span class="co">#&gt; V2.G1  7.225352e-03 5.474379e-03 2.037909e-03 2.337253e-02 9.946920e-03</span>
+<span class="co">#&gt; V3.G1  4.822461e-03 3.874571e-04 1.308809e-02 7.462745e-02 4.259804e-03</span>
+<span class="co">#&gt; V4.G1  4.216640e-03 3.505188e-02 1.741164e-02 1.503325e-04 2.961763e-02</span>
+<span class="co">#&gt; V5.G1  7.219157e-02 1.167740e-03 9.567294e-04 1.598637e-03 9.325022e-03</span>
+<span class="co">#&gt; V6.G1  9.654446e-03 5.491531e-02 1.639330e-04 1.223255e-03 3.399493e-03</span>
+<span class="co">#&gt; V1.G2  2.973739e-02 3.269215e-05 7.804407e-04 7.984754e-04 5.744163e-03</span>
+<span class="co">#&gt; V2.G2  1.026960e-05 1.555144e-03 3.378291e-04 1.471801e-02 1.003096e-02</span>
+<span class="co">#&gt; V3.G2  7.453798e-02 1.538855e-02 3.166074e-03 1.014884e-02 1.282022e-02</span>
+<span class="co">#&gt; V4.G2  1.337168e-02 6.157806e-03 9.268602e-04 9.184390e-05 1.966645e-04</span>
+<span class="co">#&gt; V7.G2  1.689533e-02 5.994211e-03 1.359274e-02 4.505715e-02 1.278467e-02</span>
+<span class="co">#&gt; V8.G2  1.876387e-02 1.467398e-02 1.051726e-01 2.596384e-02 5.857045e-02</span>
+<span class="co">#&gt; V1.G3  3.488943e-04 2.535971e-03 6.038586e-03 1.500248e-02 1.874072e-02</span>
+<span class="co">#&gt; V2.G3  5.128955e-03 1.145287e-03 2.581964e-02 2.561216e-02 9.506791e-02</span>
+<span class="co">#&gt; V3.G3  3.141273e-03 2.297799e-04 1.489010e-05 2.833097e-04 1.058387e-03</span>
+<span class="co">#&gt; V4.G3  6.297097e-02 7.088360e-02 6.307732e-03 5.775394e-02 9.346862e-03</span>
+<span class="co">#&gt; V9.G3  2.278670e-02 3.991770e-02 1.057327e-03 2.225416e-02 2.775882e-02</span>
+<span class="co">#&gt; V10.G3 1.030958e-02 3.812935e-02 5.029940e-04 1.728897e-02 1.005244e-02</span>
+<span class="co">#&gt; V1.G4  1.380442e-04 1.890210e-02 1.077318e-03 1.247444e-07 2.640321e-04</span>
+<span class="co">#&gt; V2.G4  8.190856e-02 7.178040e-06 3.422022e-03 1.114182e-03 1.505959e-02</span>
+<span class="co">#&gt; V3.G4  1.966614e-02 2.785530e-02 6.935689e-03 1.401632e-02 8.830897e-03</span>
+<span class="co">#&gt; V4.G4  1.266267e-02 7.979959e-02 5.250458e-02 1.187353e-02 5.931334e-02</span>
+<span class="co">#&gt; V8.G4  6.504847e-03 6.205979e-02 2.115205e-03 1.957848e-03 5.099109e-03</span>
+<span class="co">#&gt; V1.G5  1.347458e-03 1.313291e-04 5.762183e-03 9.996821e-02 1.997013e-02</span>
+<span class="co">#&gt; V2.G5  9.435865e-02 1.151429e-02 2.046436e-02 3.027507e-02 5.998946e-03</span>
+<span class="co">#&gt; V3.G5  3.954284e-05 1.088365e-02 2.375357e-03 1.015990e-01 9.046478e-02</span>
+<span class="co">#&gt; V4.G5  6.272153e-02 7.892611e-03 7.219087e-05 1.007920e-03 4.124584e-02</span>
+<span class="co">#&gt; V11.G5 4.627582e-03 7.318664e-03 7.026450e-03 1.297801e-03 9.500610e-03</span>
+<span class="co">#&gt; V12.G5 5.573648e-02 1.268257e-04 1.053021e-02 1.892160e-02 3.247159e-03</span>
+<span class="co">#&gt; V1.G6  4.906878e-04 2.965181e-02 1.857191e-04 7.906187e-03 5.263610e-03</span>
+<span class="co">#&gt; V2.G6  6.598563e-03 4.695145e-02 1.064705e-04 4.898899e-02 3.662745e-02</span>
+<span class="co">#&gt; V3.G6  4.770054e-03 3.661829e-02 3.799207e-02 4.763562e-02 1.698902e-02</span>
+<span class="co">#&gt; V4.G6  1.366175e-04 3.656205e-06 4.162391e-02 2.124432e-02 4.774117e-05</span>
+<span class="co">#&gt; V13.G6 2.302030e-02 1.191916e-02 2.620355e-01 2.448608e-02 8.171099e-04</span>
+<span class="co">#&gt; V1.G7  9.884702e-03 2.066763e-02 1.702411e-02 8.078457e-04 1.684103e-02</span>
+<span class="co">#&gt; V2.G7  9.992509e-03 4.878552e-03 7.464142e-02 5.724820e-03 9.222492e-02</span>
+<span class="co">#&gt; V3.G7  4.491015e-02 3.057727e-02 9.336705e-04 9.791392e-03 7.575346e-03</span>
+<span class="co">#&gt; V4.G7  2.613090e-05 2.925235e-02 4.758341e-03 9.230834e-06 1.220394e-02</span>
+<span class="co">#&gt; V1.G8  2.563608e-04 1.234439e-02 1.292964e-03 7.501145e-03 1.156438e-03</span>
+<span class="co">#&gt; V2.G8  9.776367e-03 1.510151e-02 2.649194e-04 2.774425e-02 1.290513e-04</span>
+<span class="co">#&gt; V3.G8  2.367540e-06 1.802194e-02 1.479732e-02 5.469545e-03 5.357211e-03</span>
+<span class="co">#&gt; V4.G8  4.473976e-02 8.750584e-02 2.639565e-02 4.394839e-04 1.092359e-02</span>
+<span class="co">#&gt; V14.G8 2.369440e-04 8.365116e-02 7.951701e-04 5.972609e-03 9.293583e-04</span>
+<span class="co">#&gt; V5.G8  2.075377e-02 2.182566e-03 7.299976e-02 3.507531e-02 5.798890e-03</span>
+<span class="co">#&gt; V1.G9  1.313257e-04 1.385980e-03 5.806359e-04 1.573423e-02 1.815152e-02</span>
+<span class="co">#&gt; V2.G9  8.550995e-02 7.576177e-03 4.880980e-03 6.559026e-03 1.203653e-03</span>
+<span class="co">#&gt; V3.G9  1.007029e-02 2.010767e-02 1.675480e-02 4.091152e-02 1.401815e-03</span>
+<span class="co">#&gt; V4.G9  7.463506e-03 2.652231e-03 6.106907e-02 1.983961e-03 3.704542e-04</span>
+<span class="co">#&gt; V15.G9 5.016241e-03 2.290250e-04 8.684014e-04 3.070408e-02 1.181816e-01</span>
+<span class="co">#&gt; V1.G10 1.086695e-03 6.223087e-04 3.443990e-03 2.501185e-04 2.786164e-03</span>
+<span class="co">#&gt; V2.G10 1.582945e-02 7.822923e-03 2.631434e-04 7.709216e-03 3.558027e-02</span>
+<span class="co">#&gt; V3.G10 1.591064e-04 4.506669e-03 5.758286e-03 7.276896e-03 5.631410e-03</span>
+<span class="co">#&gt; V4.G10 1.101545e-04 4.274404e-03 4.063996e-02 1.989749e-02 2.608963e-02</span>
+<span class="co">#&gt;               Dim11</span>
+<span class="co">#&gt; V1.G1  6.740802e-06</span>
+<span class="co">#&gt; V2.G1  2.550191e-02</span>
+<span class="co">#&gt; V3.G1  3.393921e-03</span>
+<span class="co">#&gt; V4.G1  8.568406e-03</span>
+<span class="co">#&gt; V5.G1  6.660565e-02</span>
+<span class="co">#&gt; V6.G1  4.584825e-02</span>
+<span class="co">#&gt; V1.G2  2.183692e-03</span>
+<span class="co">#&gt; V2.G2  5.008859e-03</span>
+<span class="co">#&gt; V3.G2  8.030480e-03</span>
+<span class="co">#&gt; V4.G2  3.188526e-03</span>
+<span class="co">#&gt; V7.G2  3.022665e-02</span>
+<span class="co">#&gt; V8.G2  1.356794e-05</span>
+<span class="co">#&gt; V1.G3  3.036566e-02</span>
+<span class="co">#&gt; V2.G3  7.517909e-02</span>
+<span class="co">#&gt; V3.G3  4.398753e-02</span>
+<span class="co">#&gt; V4.G3  1.426546e-02</span>
+<span class="co">#&gt; V9.G3  3.786603e-02</span>
+<span class="co">#&gt; V10.G3 7.374335e-02</span>
+<span class="co">#&gt; V1.G4  1.320960e-04</span>
+<span class="co">#&gt; V2.G4  3.587798e-03</span>
+<span class="co">#&gt; V3.G4  1.884372e-03</span>
+<span class="co">#&gt; V4.G4  2.635133e-02</span>
+<span class="co">#&gt; V8.G4  3.255052e-02</span>
+<span class="co">#&gt; V1.G5  1.703099e-02</span>
+<span class="co">#&gt; V2.G5  4.874191e-03</span>
+<span class="co">#&gt; V3.G5  1.585084e-02</span>
+<span class="co">#&gt; V4.G5  1.032441e-02</span>
+<span class="co">#&gt; V11.G5 1.222332e-02</span>
+<span class="co">#&gt; V12.G5 4.243735e-03</span>
+<span class="co">#&gt; V1.G6  1.422165e-02</span>
+<span class="co">#&gt; V2.G6  3.946400e-02</span>
+<span class="co">#&gt; V3.G6  1.687110e-02</span>
+<span class="co">#&gt; V4.G6  2.131000e-03</span>
+<span class="co">#&gt; V13.G6 5.796191e-03</span>
+<span class="co">#&gt; V1.G7  3.170002e-02</span>
+<span class="co">#&gt; V2.G7  2.269719e-02</span>
+<span class="co">#&gt; V3.G7  3.893734e-04</span>
+<span class="co">#&gt; V4.G7  3.647955e-03</span>
+<span class="co">#&gt; V1.G8  3.222809e-02</span>
+<span class="co">#&gt; V2.G8  3.673151e-04</span>
+<span class="co">#&gt; V3.G8  4.588925e-03</span>
+<span class="co">#&gt; V4.G8  4.970378e-04</span>
+<span class="co">#&gt; V14.G8 9.648253e-03</span>
+<span class="co">#&gt; V5.G8  3.111518e-03</span>
+<span class="co">#&gt; V1.G9  7.093524e-03</span>
+<span class="co">#&gt; V2.G9  1.013639e-02</span>
+<span class="co">#&gt; V3.G9  1.721333e-02</span>
+<span class="co">#&gt; V4.G9  1.316317e-01</span>
+<span class="co">#&gt; V15.G9 2.454257e-03</span>
+<span class="co">#&gt; V1.G10 2.196810e-03</span>
+<span class="co">#&gt; V2.G10 1.038564e-03</span>
+<span class="co">#&gt; V3.G10 1.763969e-03</span>
+<span class="co">#&gt; V4.G10 3.607448e-02</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $table</span>
+<span class="co">#&gt;             Dim1       Dim2       Dim3       Dim4       Dim5       Dim6</span>
+<span class="co">#&gt;  [1,] 0.10113269 0.09540216 0.09905229 0.06536089 0.07844541 0.10131362</span>
+<span class="co">#&gt;  [2,] 0.10005784 0.06849423 0.12251404 0.03382958 0.10011471 0.15331652</span>
+<span class="co">#&gt;  [3,] 0.10105112 0.15169038 0.06291732 0.19875141 0.04113903 0.10468637</span>
+<span class="co">#&gt;  [4,] 0.09641740 0.04858138 0.07429261 0.10079654 0.07322064 0.12088025</span>
+<span class="co">#&gt;  [5,] 0.09752272 0.06349839 0.24773464 0.26429146 0.15301178 0.21883123</span>
+<span class="co">#&gt;  [6,] 0.10076960 0.10444939 0.02967381 0.05234504 0.17782669 0.03501623</span>
+<span class="co">#&gt;  [7,] 0.10219421 0.22409607 0.05367775 0.13045847 0.12714459 0.06481349</span>
+<span class="co">#&gt;  [8,] 0.09555924 0.13410088 0.16540516 0.12833199 0.10541182 0.07576557</span>
+<span class="co">#&gt;  [9,] 0.10013993 0.05281807 0.08998547 0.00555043 0.07898804 0.10819132</span>
+<span class="co">#&gt; [10,] 0.10515523 0.05686903 0.05474691 0.02028419 0.06469729 0.01718540</span>
+<span class="co">#&gt;             Dim7       Dim8       Dim9      Dim10      Dim11</span>
+<span class="co">#&gt;  [1,] 0.09835963 0.03389050 0.10317187 0.05655205 0.14992488</span>
+<span class="co">#&gt;  [2,] 0.04380238 0.12397652 0.09677816 0.10014714 0.04865178</span>
+<span class="co">#&gt;  [3,] 0.15284169 0.03974117 0.13819501 0.16202514 0.27540712</span>
+<span class="co">#&gt;  [4,] 0.18862396 0.06605481 0.02896200 0.08856696 0.06450611</span>
+<span class="co">#&gt;  [5,] 0.03786737 0.04623075 0.25306959 0.17042747 0.06454749</span>
+<span class="co">#&gt;  [6,] 0.12514437 0.34194367 0.15026120 0.05974493 0.07848394</span>
+<span class="co">#&gt;  [7,] 0.08537581 0.09735754 0.01633329 0.12884524 0.05843454</span>
+<span class="co">#&gt;  [8,] 0.21880741 0.11654578 0.08220234 0.02429454 0.05044114</span>
+<span class="co">#&gt;  [9,] 0.03195108 0.08415389 0.09589282 0.13930907 0.16852918</span>
+<span class="co">#&gt; [10,] 0.01722631 0.05010538 0.03513372 0.07008747 0.04107382</span></code></pre></div>
+</div>
+<div id="rv" class="section level2">
+<h2>2.7 RV()</h2>
+</div>
+<div id="rv_table" class="section level2">
+<h2>2.8 RV_table()</h2>
+</div>
+<div id="lg" class="section level2">
+<h2>2.9 LG()</h2>
+</div>
+<div id="lg_table" class="section level2">
+<h2>2.10 LG_table()</h2>
+</div>
+<div id="bootstrap" class="section level2">
+<h2>2.11 bootstrap()</h2>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
