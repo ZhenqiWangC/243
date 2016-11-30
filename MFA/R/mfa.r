@@ -132,18 +132,6 @@ mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
   if (!is.null(ncomps)){
     if(ncomps<=0||ncomps%%1!=0) {
       stop("ncomps should be positive integer.")
-=======
-    #check numeric data
-    data<-as.matrix(data)
-    if(!is.numeric(data)) {stop("data should be numeric matrix or data.frame")}
-    
-    #check center and scale
-    if(!is.logical(center)&& !(is.numeric(center) && (length(center) == ncol(data)))) {
-        stop("center should be either a logical value or a numeric vector of length equal to the number of columns of 'data'")
-    }
-    if(!is.logical(scale)&& !(is.numeric(scale) && (length(scale) == ncol(data)))) {
-        stop("scale should be either a logical value or a numeric vector of length equal to the number of columns of 'data'")
->>>>>>> 39a07b6c9dd178e8499e7846b492be03e41ebc70
     }
     if(!is.logical(scale)&&any(scale==0)) {stop("scale vector can't contain zero values.")}
     
