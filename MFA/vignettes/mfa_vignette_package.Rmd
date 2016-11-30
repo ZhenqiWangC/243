@@ -196,7 +196,7 @@ L_{g(k,k')}&=\frac{\text{trace}\{(\textbf{X}_{[k]}\textbf{X}_{[k]}^T)× (\textbf
 \end{equation}$$
 
 
-### 2.9 Bootstrap for Factor Scores
+### 2.9 Bootstrap for Factor Scores{#anchor_bs}
 
 The bootstrap is using to estimate the stability of the compromise factor scores. The main idea is to
 use the properties that the compromise factor scores are the average of the partial factor scores. Therefore, we can obtain bootstrap confidence intervals (CIs) by repeatedly sampling with replacement from the set of tables and compute new compromise factor scores. From these estimates we can also compute **bootstrap ratios** for each dimension by dividing the mean of the bootstrap estimates by their standard deviation.  
@@ -246,7 +246,7 @@ mfa(data,sets,ncomps=NULL,center=TRUE,scale=TRUE)
 ```
 
 #### data
-* `data` is a dataframe or matrix of numerical values
+`data` is a dataframe or matrix of numerical values
 
 #### sets
 `sets` can be specified with: 
@@ -270,21 +270,21 @@ c("V1.G2","V2.G2","V3.G2","V4.G2","V7.G2","V8.G2"))` for data group 1 and data g
 *   A numeric vector of length equal to the number of columns of the input data: centerting is done by each column subtracting the corresponding value from the `center` vector. 
 
 #### scale
-&nbsp;&nbsp;&nbsp;`scale` determines how column scaling of the input data is performed AFTER centering. It can be specified with:
+`scale` determines how column scaling of the input data is performed AFTER centering. It can be specified with:
 
 *   A logical value: the default value `scale=TRUE` means scaling is done by dividing the (centered) columns of x by their standard deviations if center is TRUE, and the root mean square otherwise. If scale is FALSE, no scaling is done.
 *   A numeric vector of length equal to the number of columns of the input data: scaling is done by each column divided by the corresponding value from scale. 
 
-Now we use the `mfa()` on the 'wine' data set, choose to output the first 7 components and center and scale the data, then store the model returned in `mfa_wine`:
+Now we use the `mfa()` on the 'wine' data set, choose to output the first 7 components and center and scale the data, then store the model returned in 'mfa_wine':
 ```{r,results='hide',warning=F,messages=F}
 varlist<-list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53)
 mfa_wine<-mfa(wine,sets=varlist,ncomps=7,center=TRUE,scale=TRUE)
 ```
-Use `slotNames(mfa_wine)` we can see elements of `mfa_wine` model we just created:
+Use `slotNames(mfa_wine)` we can see elements of 'mfa_wine' model we just created:
 ```{r,results='hide',warnings=F,messages=F}
 slotNames(mfa_wine)
 ```
-And use `@` operatior to extract elements of the `mfa_wine` model
+And use `@` operatior to extract elements of the 'mfa_wine' model
 ```{r,warnings=F,messages=F}
 mfa_wine@eigenvalues
 ```
@@ -300,7 +300,7 @@ head(mfa_wine@loadings)
 
 ### 3.3 print
 
-Use `print()` on an object returned by `mfa()`, e.g. the `mfa_wine` in this tutorial, will display the very basic information of the object.
+Use `print()` on an object returned by `mfa()`, e.g. the 'mfa_wine' in this tutorial, will display the very basic information of the object.
 
 ```{r}
 print(mfa_wine)
@@ -308,33 +308,33 @@ print(mfa_wine)
 
 ### 3.4 plot
 
-Use `plot()` on an object returned by `mfa()`, e.g. the `mfa_wine` in this tutorial, will display graphs with regard to the object and also save the image in high resolution in the working directory named 'mfa.jpeg'. The usage of `plot()` is:
+Use `plot()` on an object returned by `mfa()`, e.g. the 'mfa_wine' in this tutorial, will display graphs with regard to the object and also save the image in high resolution in the working directory named 'mfa.jpeg'. The usage of `plot()` is:
 ```{r,eval=FALSE}
 plot(x,dim,singleoutput=NULL)
 ```
 
-#### x
-* x must be an object return by `mfa()`.
+#### `x`
+`x` must be an object return by `mfa()`.
 
-#### dim
+#### `dim`
 `dim` determines which two dimensions the graphs will be based on. It can be specified with:
 
 *   A vector of integers: e.g., `dim=c(1,2)` means plot the graphs on dimension 1 and dimension 2.
 
-#### singleoutput
-&nbsp;&nbsp;&nbsp;`singleoutput` determines whether to display all plots in the same graphs or display one specific single graph. It can be specified with:
+#### `singleoutput`
+`singleoutput` determines whether to display all plots in the same graphs or display one specific single graph. It can be specified with:
 
 *   The default value `singleoutput=NULL`: the `plot()` will display plots of eigenvalues, compromise factor scores, partial factor scores, and loadings(rescaled to have singular values ad variances) on the same graph. This graph will be saved as 'mfa.jpeg' in the working directory.
 
 *   A charater string indicating which graph to be plotted: e.g. `singleoutput='eig'` will display a barchar of eigenvalues, `singleoutput='com'` will display a scatter plot of compromise factor scores, and `singleoutput='par'` will display scatter plots of each group's partial factor scores and loadings(rescaled to have singular values ad variances). This graph will be saved as 'mfa.jpeg' in the working directory.
 
-```{r, out.width = '720px', out.length = '700px',dpi=2000,fig.asp=0.8,fig.width=9,fig.length=5,fig.align='center',message=F,results='hide'}
+```{r, out.width = '720px', out.length = '700px',dpi=500,fig.asp=0.8,fig.width=9,fig.length=5,fig.align='center',message=F,results='hide'}
 plot(mfa_wine,dim=c(1,2),singleoutput=NULL)
 ```
-```{r, out.width = '500px', out.length = '500px',dpi=2000,fig.width=6,fig.asp=0.8,fig.align='center',message=F,results='hide'}
+```{r, out.width = '500px', out.length = '500px',dpi=500,fig.width=6,fig.asp=0.8,fig.align='center',message=F,results='hide'}
 plot(mfa_wine,dim=c(1,2),singleoutput='eig')
 ```
-```{r, out.width = '500px', out.length = '500px',dpi=2000,fig.width=6,fig.asp=0.8,fig.align='center',message=FALSE,results='hide'}
+```{r, out.width = '500px', out.length = '500px',dpi=500,fig.width=6,fig.asp=0.8,fig.align='center',message=FALSE,results='hide'}
 plot(mfa_wine,dim=c(1,2),singleoutput='com')
 ```
 ```{r, out.width = '720px', out.length = '600px',dpi=2000,fig.width=9,fig.asp=0.5,message=FALSE,fig.align='right',results='hide'}
@@ -368,9 +368,9 @@ As there are quite a few variables, we use `head()` to display the first several
 head(contributions(mfa_wine)$variables)
 ```
 
-## 3.7 RV
+## 3.7 RV and LG
 
-`RV()` takes two groups of data and return the $R_v$ Coefficient between them. To see detailed explanation of the RV coeffecient, see [2.8 $R_v$ Coefficient and $L_g$ Coefficient](#anchor_co).
+`RV()` takes two groups of data and return the $R_v$ Coefficient between them. Likewise, `LG()`takes two groups of data and return the $L_g$ Coefficient between them. To see detailed explanation of these two types of coeffecients, see [2.8 $R_v$ Coefficient and $L_g$ Coefficient](#anchor_co).
 The usage of `RV()` is:
 ```{r,eval=FALSE}
 RV(table1,table2)
@@ -381,8 +381,39 @@ table1<-scale(wine[,1:6])
 table2<-scale(wine[,7:12])
 RV(table1,table2)
 ```
+Similarly, `LG()` takes two normalized data tables and for the first two groups of 'wine' data set we use `LG()` to compute their $L_g$ Coefficient:
+```{r}
+table1<-scale(wine[,1:6])
+table2<-scale(wine[,7:12])
+LG(table1,table2)
+```
 
-## 3.8 RV_table()
-## 3.9 LG()
-## 3.10 LG_table()
-## 3.11 bootstrap()
+## 3.8 RV_table and LG_table
+
+`RV_table()` takes a data set and a list with sets of variables, and return a symmetric matrix of $R_v$ Coefficients, and a symmetric matrix of $L_g$ coefficients for `LG_table()`. To see detailed explanation, see [2.8 $R_v$ Coefficient and $L_g$ Coefficient](#anchor_co).
+The usage of `RV_table()` is:
+```{r,eval=FALSE}
+RV_table(dataset,sets)
+```
+`dataset` is a normalized data set and `sets` is a list like the `sets` in `mfa()` function indicating the variables of each group. E.g. for the 'wine' data set, to compute the $R_v$ Coefficients between each pair of the first 3 data groups, we can use `RV_table()`:
+```{r}
+nor_wine<-scale(wine[,1:18])
+RV_table(nor_wine,sets=list(1:6,7:12,13:18))
+```
+Similarly for `LG_table()`:
+```{r}
+nor_wine<-scale(wine[,1:18])
+LG_table(nor_wine,sets=list(1:6,7:12,13:18))
+```
+
+## 3.9 bootstrap
+MFA is a descriptive multivariate technique, but it is often important to be able to complement the descriptive conclusions of an analysis by assessing if its results are reliable and replicable. `bootstrap()` is a function that takes the output of `mfa()` and return the boostrap ratio (by dividing each bootstrap mean by its standard deviation) of the compromise factor scores. To see the detailed explanation of how `bootstrap()`estimates the stability of the compromise factor scores, see [2.9 Bootstrap for Factor Scores](#anchor_bs). The useage of `bootstrap()` is:
+```{r,eval=FALSE}
+bootstrap(object,nbt=1000)
+```
+* `object` is an object as an output of `mfa()` function like 'mfa_Wine'
+* `nbt` is an integer value stands for the number of bootstrap samples with a default value of 1000.
+Use `bootstrap()` on our 'mfa_wine' to get the bootstrap ratios:
+```{r}
+bootstrap(mfa_wine,nbt=10000)
+```
