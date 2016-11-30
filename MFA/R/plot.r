@@ -32,14 +32,14 @@ partial_plot<-function(group_num,data,data2,names){
 #' @param singleoutput a character value among ('eig','com','par') indicating which graph to output
 #' @return plots of \code{mfa} Object
 #' @export
-#' @examples 
+#' @examples
 #' # default
-#' 
+#'
 #' # other dimentions
-#' 
+#'
 #' # single output
-#' 
-#' 
+#'
+#'
 
 setMethod("plot",signature="mfa",
           function(x,dim=c(1,2),singleoutput=NULL){
@@ -50,7 +50,7 @@ setMethod("plot",signature="mfa",
                 stop("singleoutput can only take a character value among 'eig','com','par'.")
               }
             }
-            
+
             blankPlot <- ggplot2::ggplot()+ggplot2::geom_blank(ggplot2::aes(1,1))+
               ggplot2::theme(
                 plot.background = ggplot2::element_blank(),
@@ -185,7 +185,7 @@ setMethod("plot",signature="mfa",
                 print(p1)
                 cat(" 'mfa.jpeg' is saved in the current folder")
               }
-              if (singleoutput=='pat'){
+              if (singleoutput=='par'){
                 jpeg("mfa.jpeg", width = 14, height = 9, units = 'in', res = 1000)
                 do.call(get("grid.arrange", asNamespace("gridExtra")),c(plist,ncol=5,top=""))
                 dev.off()
