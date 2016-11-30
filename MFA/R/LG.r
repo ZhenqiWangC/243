@@ -14,9 +14,7 @@
 # set funtion LG() to take two tables and return lg coefficient
 LG<-function(table1,table2){
 	#To check input data
- 	table1<-as.matrix(table1)
  	if(!is.numeric(table1)) {stop("data should be numeric matrix or data.frame")}
- 	table2<-as.matrix(table2)
  	if(!is.numeric(table2)) {stop("data should be numeric matrix or data.frame")}
 	
 	t1 <- t(table1)
