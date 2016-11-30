@@ -7,15 +7,15 @@
 LG(table1, table2)
 }
 \arguments{
-\item{table1}{a normalized data matrix}
+\item{table1}{a normalized data matrix or data.frame}
 
-\item{table2}{a normalized data matrix}
+\item{table2}{a normalized data matrix or data.frame}
 }
 \value{
 a value of Lg coefficient between two tables
 }
 \description{
-Return a value of Lg coefficient between two tables
+Return a value of Lg coefficient between two tables.
 }
 \examples{
 # default

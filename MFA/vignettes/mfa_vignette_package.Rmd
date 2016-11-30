@@ -121,7 +121,7 @@ plot(mfa_wine,dim=c(1,2),singleoutput='eig')
 plot(mfa_wine,dim=c(1,2),singleoutput='com')
 ```
 ```{r, out.width = '720px', out.length = '600px',dpi=500,fig.width=9,fig.asp=0.5,message=FALSE,fig.align='right',results='hide'}
-plot(mfa_wine,dim=c(1,2),singleoutput='pat')
+plot(mfa_wine,dim=c(1,2),singleoutput='par')
 ```
 
 ### 2.5 eigenvalues

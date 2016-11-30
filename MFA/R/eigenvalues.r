@@ -6,8 +6,8 @@
 #' @return \item{Singular value}{The square root of eigenvalues}
 #' @return \item{Eigenvalue}{The eigenvalues of \code{mfa} object}
 #' @return \item{Cumulative}{Cumulative sum of eigenvalues}
-#' @return \item{% Inertia}{Percentage inertia of eigenvalues}
-#' @return \item{Cumulative % Inertia}{Cumulative percentage inertia of eigenvalues}
+#' @return \item{precentage Inertia}{Percentage inertia of eigenvalues}
+#' @return \item{Cumulative percentage Inertia}{Cumulative percentage inertia of eigenvalues}
 #' @export
 #' @examples 
 #' 
@@ -21,8 +21,8 @@ setGeneric("eigenvalues",function(object) standardGeneric("eigenvalues"))
 #' @return \item{Singular value}{The square root of eigenvalues}
 #' @return \item{Eigenvalue}{The eigenvalues of \code{mfa} object}
 #' @return \item{Cumulative}{Cumulative sum of eigenvalues}
-#' @return \item{% Inertia}{Percentage inertia of eigenvalues}
-#' @return \item{Cumulative % Inertia}{Cumulative percentage inertia of eigenvalues}
+#' @return \item{precentage  Inertia}{Percentage inertia of eigenvalues}
+#' @return \item{Cumulative precentage  Inertia}{Cumulative percentage inertia of eigenvalues}
 #' @export
 #' @examples 
 #' 

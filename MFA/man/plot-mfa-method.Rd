@@ -3,18 +3,30 @@
 \docType{methods}
 \name{plot,mfa-method}
 \alias{plot,mfa-method}
-\title{plot method}
+\title{Plot Method for \code{mfa} Object}
 \usage{
-\S4method{plot}{mfa}(x, dim, singleoutput = NULL)
+\S4method{plot}{mfa}(x, dim = c(1, 2), singleoutput = NULL)
 }
 \arguments{
-\item{x}{a R object of mfa}
+\item{x}{a R object of \code{mfa}}
 
 \item{dim}{a integer vector of two values}
 
 \item{singleoutput}{a character value among ('eig','com','par') indicating which graph to output}
 }
+\value{
+plots of \code{mfa} Object
+}
 \description{
-Returns plots of eigenvalues, compromise factor scores and partial factor score
+Returns plots of eigenvalues, compromise factor scores and partial factor score.
+}
+\examples{
+# default
+
+# other dimentions
+
+# single output
+
+
 }
 

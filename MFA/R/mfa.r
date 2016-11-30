@@ -284,4 +284,5 @@ mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
     partial_factor_score = partial_factor_score,
     loadings = as(Q,"matrix")
     )
+  }
 }

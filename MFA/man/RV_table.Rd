@@ -2,20 +2,20 @@
 % Please edit documentation in R/RV_table.r
 \name{RV_table}
 \alias{RV_table}
-\title{Rv Table}
+\title{Rv CoefficientsTable}
 \usage{
 RV_table(dataset, sets)
 }
 \arguments{
 \item{dataset}{a normalized dataframe or matrix}
 
-\item{sets}{list of vector contains vector of indices of each group}
+\item{sets}{list of vector contains vector of indices or variable names of each group}
 }
 \value{
 a table of Rv coefficients
 }
 \description{
-Return a table of Rv coefficients between any two subsets of a normalized dataset
+Return a table of Rv coefficients between any two subsets of a normalized dataset.
 }
 \examples{
 # default 

@@ -20,7 +20,7 @@ mfa(data, sets, ncomps = NULL, center = TRUE, scale = TRUE)
 \item{scale}{either a logical value or a numeric vector of length equal to the number of active variables in the analysis}
 }
 \value{
-an object of class \code{"mfa"} with the following elements:
+an object of class \code{mfa} with the following elements:
 
 \item{sets}{list of sets}
 
@@ -37,7 +37,7 @@ an object of class \code{"mfa"} with the following elements:
 \description{
 Class \code{mfa} defines a mfa model
 
-Creates an object of class \code{"mfa"}
+Creates an object of class \code{mfa}.
 }
 \details{
 Constructor method of mfa Class.

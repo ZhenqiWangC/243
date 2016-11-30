@@ -2,20 +2,20 @@
 % Please edit documentation in R/LG_table.r
 \name{LG_table}
 \alias{LG_table}
-\title{Lg Table}
+\title{Lg Coefficients Table}
 \usage{
 LG_table(dataset, sets)
 }
 \arguments{
 \item{dataset}{a normalized dataframe or matrix}
 
-\item{sets}{list of vector contains vector of indices of each group}
+\item{sets}{list of vector contains vector of indices or variable names of each group}
 }
 \value{
 a table of Lg coefficients
 }
 \description{
-Return a table of Lg coefficients between any two subsets of a normalized dataset
+Return a table of Lg coefficients between any two subsets of a normalized dataset.
 }
 \examples{
 # default
