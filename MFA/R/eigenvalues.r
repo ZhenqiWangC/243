@@ -9,7 +9,7 @@
 #' @return \item{% Inertia}{Percentage inertia of eigenvalues}
 #' @return \item{Cumulative % Inertia}{Cumulative percentage inertia of eigenvalues}
 #' @export
-#' @example 
+#' @examples 
 #' 
 # set eigenvalues() to take 'mfa' and return a table (like Table 2)
 setGeneric("eigenvalues",function(object) standardGeneric("eigenvalues"))
@@ -24,7 +24,7 @@ setGeneric("eigenvalues",function(object) standardGeneric("eigenvalues"))
 #' @return \item{% Inertia}{Percentage inertia of eigenvalues}
 #' @return \item{Cumulative % Inertia}{Cumulative percentage inertia of eigenvalues}
 #' @export
-#' @example 
+#' @examples 
 #' 
 setMethod("eigenvalues",signature="mfa",
   function(object){

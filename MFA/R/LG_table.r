@@ -11,7 +11,6 @@
 #' LG_table(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53))
 
 LG_table <- function(dataset,sets){
-<<<<<<< HEAD
   if(!is.data.frame(dataset)&!is.matrix(dataset)){stop("dataset must be a matrix or a dataframe")}
     Table <- matrix(NA,length(sets),length(sets))
     for(i in 1:length(sets)){
@@ -23,16 +22,4 @@ LG_table <- function(dataset,sets){
     }
     Table
 }
-=======
-    if(!is.data.frame(dataset)&!is.matrix(dataset)){stop("dataset must be a matrix or a dataframe")}
-    Table <- matrix(NA,length(sets),length(sets))
-    for(i in 1:length(sets)){
-        for(j in i:length(sets)){
-            lg <- LG(as.matrix(dataset[,sets[[i]]]),as.matrix(dataset[,sets[[j]]]))
-            Table[i,j] <- lg
-            Table[j,i] <- lg
-        }
-    }
-    Table
-}
->>>>>>> 76dcd7e01ab17de9b6d9a94d72e04df930baf0a1
+

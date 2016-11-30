@@ -7,7 +7,7 @@
 #' @return \item{variables}{contribution of each variable to each dimension} 
 #' @return \item{table}{contribution of each table to each dimension} 
 #' @export
-#' @example 
+#' @examples 
 #' 
 setGeneric("contributions",function(object)standardGeneric("contributions"))
 
@@ -19,7 +19,7 @@ setGeneric("contributions",function(object)standardGeneric("contributions"))
 #' @return \item{variables}{contribution of each variable to each dimension} 
 #' @return \item{table}{contribution of each table to each dimension} 
 #' @export
-#' @example 
+#' @examples 
 #' 
 # set contributions() to take 'mfa' and return a matrix of contributions
 

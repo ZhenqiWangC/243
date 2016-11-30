@@ -8,7 +8,7 @@
 #' @return The eigenvalue of the first component
 #' @return The eigenvalue of the second component
 #' @export
-#' @example 
+#' @examples 
 #' 
 
 # set print() to print basic infomation
