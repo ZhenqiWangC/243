@@ -22,13 +22,13 @@ setClass(
 #' @name mfa
 #' @rdname mfa-class
 #' @title MFA
-#' @description Creates an object of class \code{"mfa"}
+#' @description Creates an object of class \code{mfa}.
 #' @param data could be a numeric matrix or data.frame, should be in the same order of sets
 #' @param sets list of vector contains vector of indices or variable names of each group
 #' @param ncomps positive integer indicating how many number of components are to be extracted
 #' @param center either a logical value or a numeric vector of length equal to the number of active variables in the analysis
 #' @param scale either a logical value or a numeric vector of length equal to the number of active variables in the analysis
-#' @return an object of class \code{"mfa"} with the following elements:
+#' @return an object of class \code{mfa} with the following elements:
 #' @return \item{sets}{list of sets}
 #' @return \item{weights}{vector of weights}
 #' @return \item{eigenvalues}{vector of eigenvalues}
