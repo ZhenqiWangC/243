@@ -1,6 +1,6 @@
 
-#' @title Lg Table
-#' @description Return a table of Lg coefficients between any two subsets of a normalized dataset
+#' @title Lg Coefficients Table
+#' @description Return a table of Lg coefficients between any two subsets of a normalized dataset.
 #' @param dataset a normalized dataframe or matrix
 #' @param sets list of vector contains vector of indices of each group
 #' @return a table of Lg coefficients
