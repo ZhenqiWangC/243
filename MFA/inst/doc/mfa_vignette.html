@@ -93,54 +93,120 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><strong>partial factor scores</strong>: The positions of the observations ‘as seen by’ each data set. These can be also represented as points in the compromise map.</p>
 <p><strong>loading</strong>: The quantity that variables contributes a certain amount to each component. This reflects the importance of that variable for this component and can also be used to plot maps of the variables that reflect their association.</p>
 <p><strong>contributions</strong>: A variation over squared loadings. These evaluate the importance of each variable as the pro- portion of the explained variance of the component by the variable. The contribution of a data table to a component can be obtained by adding the contributions of its variables. These contributions can then be used to draw plots expressing the importance of the data tables in the common solution.</p>
+<div id="svd" class="section level3">
+<h3>SVD</h3>
+<p>Recall that the <span class="math inline">\(SVD\)</span> of a given <span class="math inline">\(I × J\)</span> matrix <span class="math inline">\(\textbf{Z}\)</span> decomposes it into three matrices as: <span class="math display">\[\begin{equation}
+\textbf{X} = \textbf{U} \Gamma \textbf{V}^T\quad \text{with} \quad  \textbf{U}^T\textbf{U} = \textbf{V}^T\textbf{V} = \textbf{I}.
+\end{equation}\]</span> This is closely related to and generalizes the well-known <span class="math inline">\(eigendecomposition\)</span> as <span class="math inline">\(\textbf{U}\)</span> is also the matrix of the normalized eigenvectors of <span class="math inline">\(\textbf{X} \textbf{X}^T\)</span>, <span class="math inline">\(\textbf{V}\)</span> is the matrix of the normalized eigenvectors of <span class="math inline">\(\textbf{X}^T \textbf{X}\)</span>. Notice that <span class="math inline">\(\textbf{X} \textbf{X}^T\)</span> is denoted as <span class="math inline">\(\textbf{S}\)</span>, which called cross product matrix of <span class="math inline">\(\textbf{X}\)</span>. Therefore, if we do <span class="math inline">\(eigendecomposition\)</span> for <span class="math inline">\(\textbf{S}\)</span>, we can get eigenvalue <span class="math inline">\(\boldsymbol{\Lambda}\)</span>(i.e. <span class="math inline">\(\Gamma^2\)</span>) and eigenvector <span class="math inline">\(\textbf{U}\)</span> (i.e. the left singular vector of <span class="math inline">\(\textbf{X}\)</span>)</p>
+<p><em>Key property</em>: the <span class="math inline">\(SVD\)</span> provides the best reconstitution (in a least squares sense) of the original matrix by a matrix with a lower rank.</p>
+</div>
+<div id="gsvd" class="section level3">
+<h3>GSVD</h3>
+<p>The <span class="math inline">\(GSVD\)</span> generalizes the <span class="math inline">\(SVD\)</span> of a matrix by incorporating two additional positive definite matrices that represent ‘constraints’ to be incorporated in the decomposition. We call these two matrices <em>Mass Matrix</em> <span class="math inline">\(\textbf{M}\)</span> representing the ‘constraints’ imposed on the rows of an <span class="math inline">\(I\)</span> by <span class="math inline">\(J\)</span> matrix <span class="math inline">\(\textbf{X}\)</span> and <em>Weight Matrix</em> <span class="math inline">\(\textbf{A}\)</span> representing the ‘constraints’ imposed on the columns of <span class="math inline">\(\textbf{X}\)</span>. Matrix <span class="math inline">\(\textbf{M}\)</span> is almost always a diagonal matrix of the ‘masses’ of the observations (i.e., the rows); whereas matrix <span class="math inline">\(\textbf{A}\)</span> implements a metric on the variables and if often but not always diagonal.Obviously, when <span class="math inline">\(\textbf{M} = \textbf{A} = \textbf{I}\)</span>, the <span class="math inline">\(GSVD\)</span> reduces to the plain <span class="math inline">\(SVD\)</span>.The <span class="math inline">\(GSVD\)</span> of <span class="math inline">\(\textbf{X}\)</span>, taking into account <span class="math inline">\(\textbf{M}\)</span> and <span class="math inline">\(\textbf{A}\)</span>, is expressed as <span class="math display">\[\begin{equation}
+\textbf{X}=\textbf{P}\boldsymbol{\Delta}\textbf{Q}^T \quad \text{with} \quad \textbf{P}^T\textbf{M}\textbf{P} = \textbf{Q}^T\textbf{A}\textbf{Q} = \textbf{I}.
+\end{equation}\]</span> where <span class="math inline">\(\textbf{P}\)</span> is the <span class="math inline">\(I\)</span> by <span class="math inline">\(L\)</span> matrix of the normalized left generalized singular vectors (with <span class="math inline">\(L\)</span> being the rank of <span class="math inline">\(\textbf{X}\)</span>), <span class="math inline">\(\textbf{Q}\)</span> the <span class="math inline">\(J\)</span> by <span class="math inline">\(L\)</span> matrix of the normalized generalized right singular vectors, and <span class="math inline">\(\boldsymbol{\Delta}\)</span> the <span class="math inline">\(L\)</span> by <span class="math inline">\(L\)</span> diagonal matrix of the <span class="math inline">\(L\)</span> generalized singular values.</p>
+<p><em>Key property</em>: the <span class="math inline">\(GSVD\)</span> provides the best reconstitution (in a least squares sense) of the original matrix by a matrix with a lower rank under the constraints imposed by two positive definite matrices. The generalized singular vectors are orthonormal with respect to their respective matrix of constraints.</p>
+</div>
 </div>
 <div id="step-by-step-tutorial" class="section level2">
 <h2>4 Step by step tutorial</h2>
 <div id="step-1.-preprocesing" class="section level3">
 <h3>Step 1. Preprocesing</h3>
-<p>Each table was then preprocessed by first centering and normalizing each column such that its mean is equal to 0 and the sum of the square values of all its elements is equal to 1. The raw data consist of <span class="math inline">\(K\)</span> data sets collected on the same observations. Each data set is also called a table, a sub-table, or a block. The data for each table are stored in an <span class="math inline">\(I × J_{[k]}\)</span> rectangular data matrix denoted by <span class="math inline">\(\textbf{Y}_{[k]}\)</span>, where <span class="math inline">\(I\)</span> is the number of observations and <span class="math inline">\(J_{[k]}\)</span> the number of variables collected on the observations for the <span class="math inline">\(k-th\)</span> table. The total number of variables is denoted by <span class="math inline">\(J\)</span> (i.e., <span class="math inline">\(J = \sum J_{[k]}\)</span>). Each data matrix is, in general, preprocessed (e.g., centered, normalized) and the preprocessed data matrices actually used in the analysis are denoted by <span class="math inline">\(\textbf{X}_{[k]}\)</span>. The <span class="math inline">\(K\)</span> data matrices <span class="math inline">\(\textbf{X}_{[k]}\)</span> are concatenated into the complete <span class="math inline">\(I\)</span> by <span class="math inline">\(J\)</span> data matrix denoted by <span class="math inline">\(\textbf{X}\)</span>: <span class="math display">\[\begin{equation}
+<p>Each table was preprocessed by first centering and normalizing each column such that its mean is equal to 0 and the sum of the square values of all its elements is equal to 1. The raw data consist of <span class="math inline">\(K\)</span> data sets collected on the same observations. Each data set is also called a table, a sub-table, or a block. The data for each table are stored in an <span class="math inline">\(I × J_{[k]}\)</span> rectangular data matrix denoted by <span class="math inline">\(\textbf{Y}_{[k]}\)</span>, where <span class="math inline">\(I\)</span> is the number of observations and <span class="math inline">\(J_{[k]}\)</span> the number of variables collected on the observations for the <span class="math inline">\(k\)</span>-th table. The total number of variables is denoted by <span class="math inline">\(J\)</span> (i.e., <span class="math inline">\(J = \sum J_{[k]}\)</span>). Then use <code>scale</code> function to normalize the data. The <span class="math inline">\(K\)</span> data matrices <span class="math inline">\(\textbf{X}_{[k]}\)</span> are concatenated into the complete <span class="math inline">\(I\)</span> by <span class="math inline">\(J\)</span> data matrix denoted by <span class="math inline">\(\textbf{X}\)</span>: <span class="math display">\[\begin{equation}
 \textbf{X}=[\textbf{X}_{[1]}|...|\textbf{X}_{[k]}|...|\textbf{X}_{[K]}].
-\end{equation}\]</span> This step was completed by using <code>scale</code> function.</p>
+\end{equation}\]</span></p>
 </div>
 <div id="step-2.-mass-matrix" class="section level3">
 <h3>Step 2. Mass Matrix</h3>
 <p>A mass, denoted by <span class="math inline">\(m_i\)</span>, is assigned to each observation. These masses are collected in the mass vector, denoted by <span class="math inline">\(\textbf{m}\)</span>, and in the diagonal elements of the mass matrix denoted by <span class="math inline">\(\textbf{M}\)</span>, which is obtained as <span class="math display">\[\begin{equation}
-\textbf{M}=diag\{m\}
+\textbf{M}=\text{diag}\{\textbf{m}\}
 \end{equation}\]</span></p>
 </div>
 <div id="step-3.-weight-matrix" class="section level3">
 <h3>Step 3. Weight Matrix</h3>
-<p>The weight matrix gathered by doing standard PCA of each Data Table. Specifically, each table is expressed via its SVD as <span class="math display">\[\begin{equation}
+<p>The weight matrix gathered by doing standard <span class="math inline">\(PCA\)</span> of each Data Table. Specifically, each table is expressed via its <span class="math inline">\(SVD\)</span> as <span class="math display">\[\begin{equation}
 \textbf{X}_{[k]} = \textbf{U}_{[k]} \Gamma_{[k]}\textbf{V}^T_{[k]}\quad \text{with} \quad  \textbf{U}^T_{[k]}\textbf{U}_{[k]} = \textbf{V}^T_{[k]}\textbf{V}_{[k]} = \textbf{I}.
-\end{equation}\]</span> In MFA, the weight of a table is obtained from the first singular value of its PCA. This weight, denoted by αk, is equal to the inverse of the first squared singular value: <span class="math display">\[\begin{equation}
+\end{equation}\]</span> In MFA, the weight of a table is obtained from the first singular value of its <span class="math inline">\(PCA\)</span>. This weight, denoted by <span class="math inline">\(\alpha_k\)</span>, is equal to the inverse of the first squared singular value: <span class="math display">\[\begin{equation}
 \alpha_k=\frac{1}{\gamma_{1,k}^2}=\gamma_{1,k}^{-2}.
-\end{equation}\]</span> For convenience, the <span class="math inline">\(\alpha\)</span> weights can be gathered in a <span class="math inline">\(J\)</span> by <span class="math inline">\(1\)</span> vector denoted <span class="math inline">\(\textbf{a}\)</span> where each variable is assigned the <span class="math inline">\(\alpha\)</span> weight of the matrix to which it belongs. Specifically, <span class="math inline">\(\textbf{a}\)</span> is constructed as: <span class="math display">\[\begin{equation}
-a=[\alpha_1\textbf{1}_{[1]}^T,...,\alpha_k\textbf{1}_{[k]}^T,...,\alpha_K\textbf{1}_{[K]}^T],
-\end{equation}\]</span> where <span class="math inline">\(\textbf{1}_{[k]}\)</span> stands for a <span class="math inline">\(J_{[k]}\)</span> vector of ones. Alternatively, the weights can be stored as the diagonal elements of a diagonal matrix denoted by <span class="math inline">\(\textbf{A}\)</span> obtained as <span class="math display">\[\begin{equation}
-\textbf{A}=diag\{a\}.
+\end{equation}\]</span> For convenience, gather <span class="math inline">\(\alpha\)</span> weights in a <span class="math inline">\(J\)</span> by <span class="math inline">\(1\)</span> vector. Specifically, <span class="math inline">\(\textbf{a}\)</span> is constructed as: <span class="math display">\[\begin{equation}
+\textbf{a}=[\alpha_1\textbf{1}_{[1]}^T,...,\alpha_k\textbf{1}_{[k]}^T,...,\alpha_K\textbf{1}_{[K]}^T],
+\end{equation}\]</span> where <span class="math inline">\(\alpha_k\)</span> stands for the inverse of the first squared singular value of <span class="math inline">\(k\)</span>-th block and <span class="math inline">\(\textbf{1}_{[k]}\)</span> for a <span class="math inline">\(J_{[k]}\)</span> vector of ones. Alternatively, the weights can be stored as the diagonal elements of a diagonal matrix denoted by <span class="math inline">\(\textbf{A}\)</span> obtained as <span class="math display">\[\begin{equation}
+\textbf{A}=\textbf{diag}\{\textbf{a}\}.
 \end{equation}\]</span></p>
 </div>
 <div id="step-4.-calculating-cross-product-matrices" class="section level3">
 <h3>Step 4. Calculating Cross-Product Matrices</h3>
-<p>After the weights have been collected, they are used to compute the <span class="math inline">\(GSVD\)</span> of X under the constraints provided by <span class="math inline">\(\textbf{M}\)</span> (masses for the observations) and <span class="math inline">\(\textbf{A}\)</span> (squared singular value derived weights for the <span class="math inline">\(K\)</span> tables). This <span class="math inline">\(GSVD\)</span> is expressed as: <span class="math display">\[\begin{equation}
-\textbf{X}=\textbf{P}\boldsymbol{\Delta}\textbf{Q}^T \quad \text{with} \quad \textbf{P}^T\textbf{M}\textbf{P} = \textbf{Q}^T\textbf{A}\textbf{Q} = \textbf{I}.
-\end{equation}\]</span></p>
-<p>In this package we choose an alternative computational approach to compute MFA. That is using the cross-product matrices <span class="math inline">\(\textbf{S}_{[k]}\)</span>. The cross-product matrices can be directly computed from <span class="math inline">\(\textbf{X}\)</span> as <span class="math display">\[\begin{equation}
+<p>After the weights have been collected, they are used to compute the <span class="math inline">\(GSVD\)</span> of <span class="math inline">\(\textbf{X}\)</span> under the constraints provided by <span class="math inline">\(\textbf{M}\)</span> and <span class="math inline">\(\textbf{A}\)</span>. In this <span class="math inline">\(MFA\)</span> package, we choose to use the cross-product matrices <span class="math inline">\(\textbf{S}_{[k]}\)</span> to compute all elements of <span class="math inline">\(MFA\)</span>. The cross-product matrices can be directly computed from <span class="math inline">\(\textbf{X}\)</span> as <span class="math display">\[\begin{equation}
 \textbf{S}_{[+]}=\textbf{X}\textbf{A}\textbf{X}^{\textbf{T}}.
-\end{equation}\]</span> Once we got the cross product matrices, we can do eigendecomposition to get eigenvector and eigenvalue of <span class="math inline">\(\textbf{S}_{[+]}\)</span>, denote as <span class="math inline">\(\textbf{U}\)</span> and <span class="math inline">\(\boldsymbol{\lambda}\)</span> respectively. The generalized eigendecomposition under the constraints provided by matrix <span class="math inline">\(\textbf{M}\)</span> of the compromise gives: <span class="math display">\[\begin{equation}
+\end{equation}\]</span></p>
+<p>Once we got the cross product matrices, we can do <em>eigendecomposition</em> to get eigenvector and eigenvalue of <span class="math inline">\(\textbf{S}_{[+]}\)</span>, denote as <span class="math inline">\(\textbf{U}\)</span> and <span class="math inline">\(\boldsymbol{\lambda}\)</span> respectively. Actually, <span class="math display">\[\begin{equation}
+\textbf{S}_{[+]}=\textbf{U}\boldsymbol{\lambda}\textbf{U}^T=\textbf{P}\sqrt{\textbf{M}}\boldsymbol{\lambda} \sqrt{\textbf{M}}^T\textbf{P}^T=\textbf{P}\boldsymbol{\Lambda}\textbf{P}^T
+\end{equation}\]</span></p>
+<p>Thus, the generalized <em>eigendecomposition</em> under the constraints provided by matrix <span class="math inline">\(\textbf{M}\)</span> of the compromise gives: <span class="math display">\[\begin{equation}
 \textbf{S}_{[+]}=\textbf{P}\Lambda \textbf{P}^{\textbf{T}} \quad \text{with} \quad \textbf{P}^{\textbf{T}} \textbf{M}\textbf{P}=\textbf{I}.
-\end{equation}\]</span></p>
-<p>This equation and the <span class="math inline">\(GSVD\)</span> equation above, together indicate that the generalized eigenvectors of the compromise are the left generalized singular vectors of <span class="math inline">\(\textbf{X}\)</span>.The eigenvalues of <span class="math inline">\(\textbf{S}_{[+]}\)</span> (i.e. <span class="math inline">\(\lambda\)</span>) are the squares of the singular values of <span class="math inline">\(\textbf{X}\)</span>. By doing eigendecomposition and some matrix transform, we can get : <span class="math inline">\(\textbf{U}\)</span>=eigenvector of <span class="math inline">\(\textbf{S}\)</span><br />
-<span class="math display">\[\begin{equation}
-\boldsymbol{\Lambda} = \sqrt{\textbf{M}} \lambda \sqrt{\textbf{M}}
-\end{equation}\]</span></p>
+\end{equation}\]</span> Then we can compute eigenvalues <span class="math inline">\(\boldsymbol{\Lambda}\)</span>, left generalized singular vectors <span class="math inline">\(\textbf{P}\)</span> and right generalized singular vectors <span class="math inline">\(\textbf{Q}\)</span> given by:</p>
 <p><span class="math display">\[\begin{equation}
+\boldsymbol{\Lambda}=\sqrt{\textbf{M}}\boldsymbol{\lambda} \sqrt{\textbf{M}}^T
+\end{equation}\]</span> <span class="math display">\[\begin{equation}
 \textbf{P}=\textbf{U}\sqrt{\textbf{M}}^{-1}
 \end{equation}\]</span></p>
 <p><span class="math display">\[\begin{equation}
 \textbf{Q}=\textbf{X}^\textbf{T}\textbf{M}\textbf{P}\sqrt{\boldsymbol{\Lambda}}^{-1}
+\end{equation}\]</span> where <span class="math inline">\(\boldsymbol{\lambda}\)</span> and <span class="math inline">\(\textbf{U}\)</span> is the eigenvalue and eigenvector calculated by <code>eigen</code> function on <span class="math inline">\(\textbf{S}_{[+]}\)</span>.</p>
+</div>
+<div id="step-5.-important-elements-and-methods" class="section level3">
+<h3>Step 5. Important elements and methods</h3>
+<div id="scores" class="section level4">
+<h4>Scores</h4>
+<p>Once we got eigenvalue <span class="math inline">\(\boldsymbol{\Lambda}\)</span>, left generalized singular vectors <span class="math inline">\(\textbf{P}\)</span> and right generalized singular vectors <span class="math inline">\(\textbf{Q}\)</span>, we can compute partial factor score <span class="math inline">\(\textbf{F}_{[k]}\)</span> and common factor score <span class="math inline">\(\textbf{F}\)</span> obtained from: <span class="math display">\[\begin{equation}
+\textbf{F}_{[k]}=K\alpha_k\textbf{X}_{[k]}\textbf{Q}_{[k]}=K\alpha_k\textbf{X}_{[k]}\textbf{X}_{[k]}^T\textbf{M}\textbf{P}\boldsymbol{\Delta}^{-1}
+\end{equation}\]</span> <span class="math display">\[\begin{equation}
+\textbf{F}=\frac{1}{K}\sum_k \textbf{F}_{[k]}
 \end{equation}\]</span></p>
-<p>We are using a data example included in the package MFA to illustrate the use of the MFA package step by step. This data example concerns 12 wines from three wine regions and ten expert assessors were asked to evaluate these wines on 9-point rating scales, using four standard variables plus extra variables if any aseessor feels necessary.</p>
+</div>
+<div id="contributions" class="section level4">
+<h4>Contributions</h4>
+<p>In this part, we calculate three kind of contributions: contribution of an observation to a dimension,contributions of a variable to a dimension and contribution of a table to a dimension.<br />
+<strong>Observation</strong><br />
+Formally, the contribution of observation <span class="math inline">\(i\)</span> to component <span class="math inline">\(l\)</span>, denoted <span class="math inline">\(ctr_{i,l}\)</span>, is computed as <span class="math display">\[\begin{equation}
+ctr_{i,l}=\frac{m_i × f_{i,l}^2}{\lambda_l} \quad \text{with} \quad \lambda_l=\sum_i m_i × f_{i,l}^2
+\end{equation}\]</span> where <span class="math inline">\(m_i\)</span> and <span class="math inline">\(f_{i,l}\)</span> are, respectively, the mass of the <span class="math inline">\(i\)</span>th observation and the factor score of the <span class="math inline">\(i\)</span>th observation for the <span class="math inline">\(l\)</span>th dimension.<br />
+<strong>Variable</strong><br />
+As we did for the observations, we can find the important variables for a given dimension by computing variable contributions.The contribution of variable <span class="math inline">\(j\)</span> to component <span class="math inline">\(l\)</span>, denoted <span class="math inline">\(ctr_{j,l}\)</span>, is computed as <span class="math display">\[\begin{equation}
+ctr_{j,l}=a_j × q_{j,l}^2 \quad \text{with} \quad 1=\sum_j a_j × q_{j,l}^2
+\end{equation}\]</span> where <span class="math inline">\(q_{i,l}\)</span> is the loading of the <span class="math inline">\(j\)</span>th variable for the <span class="math inline">\(l\)</span>th dimension.<br />
+<strong>Table</strong><br />
+As a table comprises several variables, the contribution of a table can simply be defined as the sum of the contributions of its variables. So the contribution of table k to component l is denoted <span class="math inline">\(ctr_{k,l}\)</span> and is defined as <span class="math display">\[\begin{equation}
+ctr_{k,l}=\sum_j^{J_{[k]}} ctr_{j,l}
+\end{equation}\]</span> Contributions take values between 0 and 1, and for a given component, the contributions of all variables sum to 1. The larger a contribution of a <em>observation/variable/table</em> to a component the more this <em>observation/variable/table</em> contributes to this component. Table contributions and partial inertias can be used to create plots that show the importance of these tables for the components. These plots can be drawn one component at a time or two (or rarely three) components at a time in a manner analogous to factor maps.</p>
+</div>
+<div id="coefficients" class="section level4">
+<h4>Coefficients</h4>
+<p>To evaluate the similarity between two tables one can compute coefficients of similarity between data tables. There are two kind of coefficients in our <span class="math inline">\(MFA\)</span> package: <span class="math inline">\(R_v\)</span> coefficient reflecting the amount of variance shared by two matrices and <span class="math inline">\(L_g\)</span> coefficient reflecting the MFA normalization and taking positive values. Specifically, <span class="math inline">\(R_V\)</span> coefficient between data tables <span class="math inline">\(k\)</span> and <span class="math inline">\(k′\)</span> is computed as</p>
+<p><span class="math display">\[\begin{equation}
+R_{Vk,k'}=\frac{\text{trace}\{(\textbf{X}_{[k]}\textbf{X}_{[k]}^T)× (\textbf{X}_{[k']}\textbf{X}_{[k']}^T)\}}{\sqrt{\text{trace}\{(\textbf{X}_{[k]}\textbf{X}_{[k]}^T)× (\textbf{X}_{[k]}\textbf{X}_{[k]}^T)\}× \text{trace}\{(\textbf{X}_{[k']}\textbf{X}_{[k']}^T)× (\textbf{X}_{[k']}\textbf{X}_{[k']}^T)\}}}
+\end{equation}\]</span> <span class="math inline">\(L_g\)</span> coefficient between data tables <span class="math inline">\(k\)</span> and <span class="math inline">\(k′\)</span> is computed as <span class="math display">\[\begin{equation}
+\begin{aligned}
+L_{g(k,k')}&amp;=\frac{\text{trace}\{(\textbf{X}_{[k]}\textbf{X}_{[k]}^T)× (\textbf{X}_{[k']}\textbf{X}_{[k']}^T)\}}{\gamma_{1,k}^2 × \gamma_{1,k'}^2}\\
+&amp;= \text{trace}\{(\textbf{X}_{[k]}\textbf{X}_{[k]}^T)× (\textbf{X}_{[k']}\textbf{X}_{[k']}^T)\}× \alpha_k × \alpha_{k'}
+\end{aligned}
+\end{equation}\]</span></p>
+</div>
+<div id="bootstrap-for-factor-scores" class="section level4">
+<h4>Bootstrap for Factor Scores</h4>
+<p>The bootstrap is using to estimate the stability of the compromise factor scores. The main idea is to use the properties that the compromise factor scores are the average of the partial factor scores. Therefore, we can obtain bootstrap confidence intervals (CIs) by repeatedly sampling with replacement from the set of tables and compute new compromise factor scores. From these estimates we can also compute <strong>bootstrap ratios</strong> for each dimension by dividing the mean of the bootstrap estimates by their standard deviation.<br />
+To compute a bootstrap estimate, first we need to generate a bootstrap sample. To do so, we take a sample of integers with replacement from the set of integers from 1 to <span class="math inline">\(K\)</span>. We call this set <span class="math inline">\(\mathbb{B}\)</span> (for bootstrap). Then generate a new data set (i.e., a new <span class="math inline">\(\textbf{X}\)</span> matrix comprising <span class="math inline">\(K\)</span> tables) using matrices <span class="math inline">\(\textbf{X}_{[k]}\)</span> with these indices. Combine all these sample blocks in a data matrix denoted <span class="math inline">\(\textbf{X}_1^*\)</span> that would then be analyzed by <span class="math inline">\(MFA\)</span>. This would provide a set of bootstrapped factor scores (denoted <span class="math inline">\(\textbf{F}_1^*\)</span>). Then repeat the procedure a large number of times (e.g., <span class="math inline">\(L\)</span> = 1000) and generate <span class="math inline">\(L\)</span> bootstrapped matrices of factor scores <span class="math inline">\(\textbf{F}_l^*\)</span> . <span class="math inline">\(\bar{\textbf{F}}^∗\)</span> denotes the bootstrap estimated factor scores, and is computed as <span class="math display">\[\begin{equation}
+\bar{\textbf{F}}^∗=\frac{1}{L}\sum_l^L \textbf{F}_l^*
+\end{equation}\]</span> <span class="math inline">\(\hat\sigma_{F^*}^2\)</span> denotes the bootstrapped estimate of the variance and is computed as <span class="math display">\[\begin{equation}
+\hat\sigma_{F^*}^2=\frac{1}{L}\big(\sum_l^L(\textbf{F}_l^*-\bar{\textbf{F}}^∗) ◦ (\textbf{F}_l^*-\bar{\textbf{F}}^∗)\big)
+\end{equation}\]</span> <strong>Bootstrap ratios</strong> is computed as <span class="math display">\[\begin{equation}
+\frac{\bar{\textbf{F}}^∗}{\hat\sigma_{F^*}}
+\end{equation}\]</span></p>
+<pre><code>We are using a data example included in the package MFA to illustrate the use of the MFA package step by step. This data example concerns 12 wines from three
+wine regions and ten expert assessors
+were asked to evaluate these wines on 9-point rating
+scales, using four standard variables plus extra variables if any aseessor feels necessary.</code></pre>
+</div>
 </div>
 </div>
 <div id="getting-started" class="section level2">

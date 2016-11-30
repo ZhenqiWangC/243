@@ -27,7 +27,7 @@ MFA is used when several sets of variables have been measured on the same set of
 
 For example, suppose we have 12 wines evaluated by 10 different wine experts. The different data sets can have the same observations (wines) evaluated by different subjects (wine experts) or groups of sub- jects with different variables (each wine expert evaluates the wines with his/her own set of scales). In this case, the first data set corresponds to the first subject, the second one to the second subject and so on. The goal of the analysis, then, is to evaluate if there is an agreement between the subjects or groups of subjects.
 
-## 3 Main Idea
+## 3 Main Idea 
 The general idea behind MFA is to normalize each of the individual data sets so that their first principal component has the same length. There are several terms with regards to MFA: 
 
 **compromise/consensus**: Obtained by combining normalized individual data table into a common representation of the observations.
@@ -41,65 +41,82 @@ The general idea behind MFA is to normalize each of the individual data sets so 
 **contributions**: A variation over squared loadings. These evaluate the importance of each variable as the pro- portion of the explained variance of the component by the variable. The contribution of a data table to a component can be obtained by adding the contributions of its variables. These contributions can then be used to draw plots expressing the importance of the data tables in the common solution.
 
 
+### SVD
+
+Recall that the $SVD$ of a given $I × J$ matrix $\textbf{Z}$ decomposes it into three matrices as:
+$$\begin{equation}
+\textbf{X} = \textbf{U} \Gamma \textbf{V}^T\quad \text{with} \quad  \textbf{U}^T\textbf{U} = \textbf{V}^T\textbf{V} = \textbf{I}.
+\end{equation}$$
+This is closely related to and generalizes the well-known $eigendecomposition$ as $\textbf{U}$ is also the matrix of the normalized eigenvectors of $\textbf{X} \textbf{X}^T$, $\textbf{V}$ is the matrix of the normalized eigenvectors of $\textbf{X}^T \textbf{X}$.
+Notice that  $\textbf{X} \textbf{X}^T$ is denoted as $\textbf{S}$, which called cross product matrix of $\textbf{X}$. Therefore, if we do $eigendecomposition$ for $\textbf{S}$, we can get eigenvalue $\boldsymbol{\Lambda}$(i.e. $\Gamma^2$) and eigenvector $\textbf{U}$ (i.e. the left singular vector of $\textbf{X}$)  
+
+*Key property*: the $SVD$ provides the best reconstitution (in a least squares sense) of the original matrix by a matrix with a lower rank.
+
+### GSVD
+The $GSVD$ generalizes the $SVD$ of a matrix by incorporating two additional positive definite matrices that represent ‘constraints’ to be incorporated in the decomposition. We call these two matrices *Mass Matrix* $\textbf{M}$ representing the ‘constraints’ imposed on the rows of an $I$ by $J$ matrix $\textbf{X}$ and *Weight Matrix* $\textbf{A}$ representing the ‘constraints’ imposed on the columns of $\textbf{X}$. Matrix $\textbf{M}$ is almost always a diagonal matrix of the ‘masses’ of the observations (i.e., the rows); whereas matrix $\textbf{A}$ implements a metric on the variables and if often but not always diagonal.Obviously, when $\textbf{M} = \textbf{A} = \textbf{I}$, the $GSVD$ reduces to the plain $SVD$.The $GSVD$ of $\textbf{X}$, taking into account $\textbf{M}$ and $\textbf{A}$, is expressed as 
+$$\begin{equation}
+\textbf{X}=\textbf{P}\boldsymbol{\Delta}\textbf{Q}^T \quad \text{with} \quad \textbf{P}^T\textbf{M}\textbf{P} = \textbf{Q}^T\textbf{A}\textbf{Q} = \textbf{I}.
+\end{equation}$$
+where $\textbf{P}$ is the $I$ by $L$ matrix of the normalized left generalized singular vectors (with $L$ being the rank of $\textbf{X}$), $\textbf{Q}$ the $J$ by $L$ matrix of the normalized generalized right singular vectors, and $\boldsymbol{\Delta}$ the $L$ by $L$ diagonal matrix of the $L$ generalized singular values.  
+
+*Key property*: the $GSVD$ provides the best reconstitution (in a least squares sense) of the original matrix by a matrix with a lower rank under the constraints imposed by two positive definite matrices. The generalized singular vectors are orthonormal with respect to their respective matrix of constraints.  
+
 ## 4 Step by step tutorial
 
 ### Step 1. Preprocesing
-Each table was then preprocessed by first centering and normalizing each column such that its mean is equal to 0 and the sum of the square values of all its elements is equal to 1. 
-The raw data consist of $K$ data sets collected on the same observations. Each data set is also called a table, a sub-table, or a block. The data for each table are stored in an $I × J_{[k]}$ rectangular data matrix denoted by $\textbf{Y}_{[k]}$, where $I$ is the number of observations and $J_{[k]}$ the number of variables collected on the observations for the $k-th$ table. The total number of variables is denoted by $J$ (i.e., $J = \sum  J_{[k]}$). Each data matrix is, in general, preprocessed (e.g., centered, normalized) and the preprocessed data matrices actually used in the analysis are denoted by $\textbf{X}_{[k]}$.
+Each table was preprocessed by first centering and normalizing each column such that its mean is equal to 0 and the sum of the square values of all its elements is equal to 1. The raw data consist of $K$ data sets collected on the same observations. Each data set is also called a table, a sub-table, or a block. The data for each table are stored in an $I × J_{[k]}$ rectangular data matrix denoted by $\textbf{Y}_{[k]}$, where $I$ is the number of observations and $J_{[k]}$ the number of variables collected on the observations for the $k$-th table. The total number of variables is denoted by $J$ (i.e., $J = \sum  J_{[k]}$). Then use `scale` function to normalize the data. 
 The $K$ data matrices $\textbf{X}_{[k]}$ are concatenated into the complete $I$ by $J$ data matrix denoted by $\textbf{X}$:
 $$\begin{equation}
 \textbf{X}=[\textbf{X}_{[1]}|...|\textbf{X}_{[k]}|...|\textbf{X}_{[K]}].
 \end{equation}$$
-This step was completed by using `scale` function. 
 
 ### Step 2. Mass Matrix
 A mass, denoted by $m_i$, is assigned to each observation. These masses are collected in the mass vector, denoted by $\textbf{m}$, and in the diagonal elements of the mass matrix denoted by $\textbf{M}$, which is obtained as 
 $$\begin{equation}
-\textbf{M}=diag\{m\}
+\textbf{M}=\text{diag}\{\textbf{m}\}
 \end{equation}$$
 
 
 ### Step 3. Weight Matrix 
-The weight matrix gathered by doing standard PCA of each Data Table. Specifically, each table is expressed via its SVD as
+The weight matrix gathered by doing standard $PCA$ of each Data Table. Specifically, each table is expressed via its $SVD$ as
 $$\begin{equation}
 \textbf{X}_{[k]} = \textbf{U}_{[k]} \Gamma_{[k]}\textbf{V}^T_{[k]}\quad \text{with} \quad  \textbf{U}^T_{[k]}\textbf{U}_{[k]} = \textbf{V}^T_{[k]}\textbf{V}_{[k]} = \textbf{I}.
 \end{equation}$$
-In MFA, the weight of a table is obtained from the first singular value of its PCA. This weight, denoted by αk, is equal to the inverse of the first squared singular value:
+In MFA, the weight of a table is obtained from the first singular value of its $PCA$. This weight, denoted by $\alpha_k$, is equal to the inverse of the first squared singular value:
 $$\begin{equation}
 \alpha_k=\frac{1}{\gamma_{1,k}^2}=\gamma_{1,k}^{-2}.
 \end{equation}$$
-For convenience, the $\alpha$ weights can be gathered in a $J$ by $1$ vector denoted $\textbf{a}$ where each variable is assigned the $\alpha$ weight of the matrix to which it belongs. Specifically, $\textbf{a}$ is constructed as:
+For convenience, gather $\alpha$ weights in a $J$ by $1$ vector. Specifically, $\textbf{a}$ is constructed as:
 $$\begin{equation}
-a=[\alpha_1\textbf{1}_{[1]}^T,...,\alpha_k\textbf{1}_{[k]}^T,...,\alpha_K\textbf{1}_{[K]}^T],
+\textbf{a}=[\alpha_1\textbf{1}_{[1]}^T,...,\alpha_k\textbf{1}_{[k]}^T,...,\alpha_K\textbf{1}_{[K]}^T],
 \end{equation}$$
-where $\textbf{1}_{[k]}$ stands for a $J_{[k]}$ vector of ones. Alternatively, the weights can be stored as the diagonal elements of a diagonal matrix denoted by $\textbf{A}$ obtained as
+where $\alpha_k$ stands for the inverse of the first squared singular value of $k$-th block and $\textbf{1}_{[k]}$ for a $J_{[k]}$ vector of ones. Alternatively, the weights can be stored as the diagonal elements of a diagonal matrix denoted by $\textbf{A}$ obtained as
 $$\begin{equation}
-\textbf{A}=diag\{a\}.
+\textbf{A}=\textbf{diag}\{\textbf{a}\}.
 \end{equation}$$
 
 ### Step 4. Calculating Cross-Product Matrices
-After the weights have been collected, they are used to compute the $GSVD$ of X under the constraints provided by $\textbf{M}$ (masses for the observations) and $\textbf{A}$ (squared singular value derived weights for the $K$ tables). This $GSVD$ is expressed as: 
-$$\begin{equation}
-\textbf{X}=\textbf{P}\boldsymbol{\Delta}\textbf{Q}^T \quad \text{with} \quad \textbf{P}^T\textbf{M}\textbf{P} = \textbf{Q}^T\textbf{A}\textbf{Q} = \textbf{I}.
-\end{equation}$$
-
-In this package we choose an alternative computational approach to compute MFA. That is using the cross-product matrices $\textbf{S}_{[k]}$. The cross-product matrices can be directly computed from $\textbf{X}$ as 
+After the weights have been collected, they are used to compute the $GSVD$ of $\textbf{X}$ under the constraints provided by $\textbf{M}$ and $\textbf{A}$.
+In this $MFA$ package, we choose to use the cross-product matrices $\textbf{S}_{[k]}$ to compute all elements of $MFA$. The cross-product matrices can be directly computed from $\textbf{X}$ as 
 $$\begin{equation}
 \textbf{S}_{[+]}=\textbf{X}\textbf{A}\textbf{X}^{\textbf{T}}.
 \end{equation}$$
-Once we got the cross product matrices, we can do eigendecomposition to get eigenvector and eigenvalue of $\textbf{S}_{[+]}$, denote as $\textbf{U}$ and $\boldsymbol{\lambda}$ respectively.
-The generalized eigendecomposition under the constraints provided by matrix $\textbf{M}$ of the compromise gives: 
+
+
+Once we got the cross product matrices, we can do *eigendecomposition* to get eigenvector and eigenvalue of $\textbf{S}_{[+]}$, denote as $\textbf{U}$ and $\boldsymbol{\lambda}$ respectively. Actually,
+$$\begin{equation}
+\textbf{S}_{[+]}=\textbf{U}\boldsymbol{\lambda}\textbf{U}^T=\textbf{P}\sqrt{\textbf{M}}\boldsymbol{\lambda} \sqrt{\textbf{M}}^T\textbf{P}^T=\textbf{P}\boldsymbol{\Lambda}\textbf{P}^T
+\end{equation}$$
+
+Thus, the generalized *eigendecomposition* under the constraints provided by matrix $\textbf{M}$ of the compromise gives: 
 $$\begin{equation}
 \textbf{S}_{[+]}=\textbf{P}\Lambda \textbf{P}^{\textbf{T}} \quad \text{with} \quad \textbf{P}^{\textbf{T}} \textbf{M}\textbf{P}=\textbf{I}.
 \end{equation}$$
+Then we can compute eigenvalues $\boldsymbol{\Lambda}$, left generalized singular vectors $\textbf{P}$ and right generalized singular vectors $\textbf{Q}$ given by:
 
-This equation and the $GSVD$ equation above, together indicate that the generalized eigenvectors of the compromise are the left generalized singular vectors of $\textbf{X}$.The eigenvalues of $\textbf{S}_{[+]}$ (i.e. $\lambda$) are the squares of the singular values of $\textbf{X}$.
-By doing eigendecomposition and some matrix transform, we can get :
-$\textbf{U}$=eigenvector of $\textbf{S}$  
 $$\begin{equation}
-\boldsymbol{\Lambda} = \sqrt{\textbf{M}} \lambda \sqrt{\textbf{M}}
+\boldsymbol{\Lambda}=\sqrt{\textbf{M}}\boldsymbol{\lambda} \sqrt{\textbf{M}}^T
 \end{equation}$$
-
 $$\begin{equation}
 \textbf{P}=\textbf{U}\sqrt{\textbf{M}}^{-1}
 \end{equation}$$
@@ -107,16 +124,78 @@ $$\begin{equation}
 $$\begin{equation}
 \textbf{Q}=\textbf{X}^\textbf{T}\textbf{M}\textbf{P}\sqrt{\boldsymbol{\Lambda}}^{-1}
 \end{equation}$$
+where $\boldsymbol{\lambda}$ and $\textbf{U}$ is the eigenvalue and eigenvector calculated by `eigen` function on $\textbf{S}_{[+]}$. 
 
 
+### Step 5. Important elements and methods 
+####Scores
+Once we got eigenvalue $\boldsymbol{\Lambda}$, left generalized singular vectors $\textbf{P}$ and right generalized singular vectors $\textbf{Q}$, we can compute partial factor score $\textbf{F}_{[k]}$ and common factor score $\textbf{F}$ obtained from:
+$$\begin{equation}
+\textbf{F}_{[k]}=K\alpha_k\textbf{X}_{[k]}\textbf{Q}_{[k]}=K\alpha_k\textbf{X}_{[k]}\textbf{X}_{[k]}^T\textbf{M}\textbf{P}\boldsymbol{\Delta}^{-1}
+\end{equation}$$
+$$\begin{equation}
+\textbf{F}=\frac{1}{K}\sum_k \textbf{F}_{[k]}
+\end{equation}$$
+
+####Contributions
+In this part, we calculate three kind of contributions: contribution of an observation to a dimension,contributions of a variable to a dimension and contribution of a table to a dimension.    
+**Observation**  
+Formally, the contribution of observation $i$ to component $l$, denoted $ctr_{i,l}$, is computed as 
+$$\begin{equation}
+ctr_{i,l}=\frac{m_i × f_{i,l}^2}{\lambda_l} \quad \text{with} \quad \lambda_l=\sum_i m_i × f_{i,l}^2
+\end{equation}$$
+where $m_i$ and $f_{i,l}$ are, respectively, the mass of the $i$th observation and the factor score of the $i$th observation for the $l$th dimension.   
+**Variable**  
+As we did for the observations, we can find the important variables for a given dimension by computing variable contributions.The contribution of variable $j$ to component $l$, denoted $ctr_{j,l}$, is computed as
+$$\begin{equation}
+ctr_{j,l}=a_j × q_{j,l}^2 \quad \text{with} \quad 1=\sum_j a_j × q_{j,l}^2
+\end{equation}$$
+where $q_{i,l}$ is the loading of the $j$th variable for the $l$th dimension.  
+**Table**  
+As a table comprises several variables, the contribution of a table can simply be defined as the sum of the contributions of its variables. So the contribution of table k to component l is denoted $ctr_{k,l}$ and is defined as 
+$$\begin{equation}
+ctr_{k,l}=\sum_j^{J_{[k]}} ctr_{j,l}
+\end{equation}$$
+Contributions take values between 0 and 1, and for a given component, the contributions of all variables sum to 1. The larger a contribution of a *observation/variable/table* to a component the more this *observation/variable/table* contributes to this component. 
+Table contributions and partial inertias can be used to create plots that show the importance of these tables for the components. These plots can be drawn one component at a time or two (or rarely three) components at a time in a manner analogous to factor maps.
+
+#### Coefficients
+To evaluate the similarity between two tables one can compute coefficients of similarity between data tables. There are two kind of coefficients in our $MFA$ package: $R_v$ coefficient reflecting the amount of variance shared by two matrices and $L_g$ coefficient reflecting the MFA normalization and taking positive values.  Specifically, $R_V$  coefficient between data tables $k$ and $k′$ is computed as
+
+$$\begin{equation}
+R_{Vk,k'}=\frac{\text{trace}\{(\textbf{X}_{[k]}\textbf{X}_{[k]}^T)× (\textbf{X}_{[k']}\textbf{X}_{[k']}^T)\}}{\sqrt{\text{trace}\{(\textbf{X}_{[k]}\textbf{X}_{[k]}^T)× (\textbf{X}_{[k]}\textbf{X}_{[k]}^T)\}× \text{trace}\{(\textbf{X}_{[k']}\textbf{X}_{[k']}^T)× (\textbf{X}_{[k']}\textbf{X}_{[k']}^T)\}}}
+\end{equation}$$
+$L_g$  coefficient between data tables $k$ and $k′$ is computed as
+$$\begin{equation}
+\begin{aligned}
+L_{g(k,k')}&=\frac{\text{trace}\{(\textbf{X}_{[k]}\textbf{X}_{[k]}^T)× (\textbf{X}_{[k']}\textbf{X}_{[k']}^T)\}}{\gamma_{1,k}^2 × \gamma_{1,k'}^2}\\
+&= \text{trace}\{(\textbf{X}_{[k]}\textbf{X}_{[k]}^T)× (\textbf{X}_{[k']}\textbf{X}_{[k']}^T)\}× \alpha_k × \alpha_{k'}
+\end{aligned}
+\end{equation}$$
 
 
+#### Bootstrap for Factor Scores
+The bootstrap is using to estimate the stability of the compromise factor scores. The main idea is to
+use the properties that the compromise factor scores are the average of the partial factor scores. Therefore, we can obtain bootstrap confidence intervals (CIs) by repeatedly sampling with replacement from the set of tables and compute new compromise factor scores. From these estimates we can also compute **bootstrap ratios** for each dimension by dividing the mean of the bootstrap estimates by their standard deviation.  
+To compute a bootstrap estimate, first we need to generate a bootstrap sample. To do so, we take a sample of integers with replacement from the set of integers from 1 to $K$. We call this set $\mathbb{B}$ (for bootstrap). Then generate a new data set (i.e., a new $\textbf{X}$ matrix comprising $K$ tables) using matrices $\textbf{X}_{[k]}$ with these indices. Combine all these sample blocks in a data matrix denoted $\textbf{X}_1^*$ that would then be analyzed by $MFA$. This would provide a set of bootstrapped factor scores (denoted $\textbf{F}_1^*$). Then repeat the procedure a large number of times (e.g., $L$ = 1000) and generate $L$ bootstrapped matrices of factor scores $\textbf{F}_l^*$ . $\bar{\textbf{F}}^∗$ denotes the bootstrap estimated factor scores, and is computed as
+$$\begin{equation}
+\bar{\textbf{F}}^∗=\frac{1}{L}\sum_l^L \textbf{F}_l^*
+\end{equation}$$
+$\hat\sigma_{F^*}^2$ denotes the bootstrapped estimate of the variance and is computed as
+$$\begin{equation}
+\hat\sigma_{F^*}^2=\frac{1}{L}\big(\sum_l^L(\textbf{F}_l^*-\bar{\textbf{F}}^∗) ◦ (\textbf{F}_l^*-\bar{\textbf{F}}^∗)\big)
+\end{equation}$$
+**Bootstrap ratios** is computed as
+$$\begin{equation}
+\frac{\bar{\textbf{F}}^∗}{\hat\sigma_{F^*}}
+\end{equation}$$
 
+```
 We are using a data example included in the package MFA to illustrate the use of the MFA package step by step. This data example concerns 12 wines from three
 wine regions and ten expert assessors
 were asked to evaluate these wines on 9-point rating
 scales, using four standard variables plus extra variables if any aseessor feels necessary.
-
+```
 ## 2.1 Getting started
 To run any of the MFA functions, it is necessary to make the package active by using the library command:
 ```{r}
