@@ -133,9 +133,9 @@ mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
       stop("ncomps should be positive integer.")
     }
     if(!is.logical(scale)&&any(scale==0)) {stop("scale vector can't contain zero values.")}
-    
+  }
     #check sets
-    if(is.numeric(sets[[1]])){
+  if(is.numeric(sets[[1]])){
         check_sets<-NULL
         for (i in 1:length(sets)) {
             if(!is.numeric(sets[[i]])) {stop("sets should be a list of numeric vectors or character vectors.")}
@@ -145,7 +145,7 @@ mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
         if(any(!check_sets%in%1:ncol(data))) {stop("sets out of bounds")}
         if(!identical(1:ncol(data),check_sets)) {warning("sets contain some overlapped and skipped columns.")}
     }else{
-        if(is.character(sets[[1]])){
+      if(is.character(sets[[1]])){
             check_sets<-NULL
             check_names<-NULL
             for (i in 1:length(sets)){
@@ -157,9 +157,9 @@ mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
             if(length(check_sets)!=ncol(data)) {stop("The sum of sets lengths does not equal to the number of columns, or the variable names are in the wrong order.")}
             if(!identical(colnames(data),check_names)) {warning("sets contain some overlapped and skipped columns.")}
         }else{
-            stop("sets should be a list of numeric vectors or character vectors.")
-        }
-    }
+          stop("sets should be a list of numeric vectors or character vectors.")
+      }
+  }
     
     
     datarownames<-row.names(data)
@@ -284,5 +284,4 @@ mfa<-function(data,sets,ncomps=NULL,center=TRUE,scale=TRUE){
     partial_factor_score = partial_factor_score,
     loadings = as(Q,"matrix")
     )
-  }
 }
