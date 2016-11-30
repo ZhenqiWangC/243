@@ -10,13 +10,15 @@ vignette: >
 \fontsize{12}{12}
 ```{r, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(collapse = T, comment = "#>")
-options(tibble.print_min = 4L, tibble.print_max = 4L)
+options(tibble.print_min = 4L, tibble.print_max = 4L,width = 100)
 library(MFA)
 ```
-
 This vignette gives an introduction to the model Multiple Factor Analysis and an overview the package MFA developed to apply the model on data. You might find reading this entire vignette helpful to get a broad understanding of what can be done in R using the MFA. 
 
 ## 1 Introdution to Multiple Factor Analysis {#sec:line-type-spec}
+
+### 1.1 MFA and related document
+### 1.2 The mathematics behind the package
 
 ## 2 Step by step tutorial
 
@@ -31,7 +33,7 @@ To run any of the MFA functions, it is necessary to make the package active by u
 library(MFA)
 ```
 The data on which we apply MFA functions should be either data frame or matrix object in R. The users could of course read data from a local file and here are of course many ways to enter data into R, just make sure prepare the data to be analyzed as data frame or matrix. The data example 'wine' has been loaded in the global environment in R when loading the MFA package, we can use head( ) to check the 'wine' data. As the data example is of many variables, we will choose the first 12 to show:
-```{r}
+```{r }
 head(wine)[,1:12]
 ```
 
@@ -39,33 +41,101 @@ It is required that the data on which we apply MFA functions is organized in cer
 ```{r}
 colnames(wine)
 ```
-It's also recommended that the input data has row names and columns names for more readable outputs of the MFA functions.
+It's also recommended that the input data has row names and columns names for more readable outputs of the MFA functions. The reasons will be elaborated in the next sections.
+
 ### 2.2 mfa
-```{r,echo=F}
-mfa_wine<-mfa(wine,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),ncomps=NULL,center=TRUE,scale=TRUE)
+
+We can now begin to use `mfa()` function to build a MFA model on data example 'wine'. The usage of `mfa()` is:
+```{r,eval=FALSE}
+mfa(data,sets,ncomps=NULL,center=TRUE,scale=TRUE)
 ```
-### 2.3 print()
+
+#### data
+* `data` is a dataframe or matrix of numerical values
+
+#### sets
+&nbsp;&nbsp;&nbsp;`sets` can be specified with: 
+
+*   A list of numbers indicating column indicies of each data groups: e.g., for this wine data set if we only want to analyze the first two groups, we specify `sets=list(1:6,7:12)` means columns 1 to 6 are variables of wine accessor no.1, columns 7 to 12 are variables of wine accessor no.2.
+
+*   A list of variable names indicating column names of each data groups,you can use the first and last variable names of each group: e.g., for this wine data sets, we can use 'sets=list(c("V1.G1","V6.G1"),c("V1.G2","V8.G2"))' for data group 1 and data group 2. Alternatively, you can use the full list of variable names of each group: e.g., `sets=list(c("V1.G1","V2.G1","V3.G1","V4.G1","V5.G1","V6.G1"),
+c("V1.G2","V2.G2","V3.G2","V4.G2","V7.G2","V8.G2"))` for data group 1 and data group 2. 
+
+#### ncomp
+&nbsp;&nbsp;&nbsp;`ncomps` controls the number of components to be considered by the model. It can be specified with:
+
+*   The default value `ncomps=NULL`: the `mfa()` will simply output results of all components. 
+
+*   An integer smaller than the rank of the input data: e.g., for this wine data set we can spesify `ncomps=3`, which limit all the calculations in `mfa()` to the firs 3 components of the data.
+
+#### center
+&nbsp;&nbsp;&nbsp;`center` determines how column centering of the input data is performed. It can be specified with:
+
+*   A logical value: the default value `center=TRUE` meaning centering is done by subtracting the column means (omitting NAs) of x from their corresponding columns. If center is FALSE, no centering is done.
+*   A numeric vector of length equal to the number of columns of the input data: centerting is done by each column subtracting the corresponding value from the `center` vector. 
+
+#### scale
+&nbsp;&nbsp;&nbsp;`scale` determines how column scaling of the input data is performed AFTER centering. It can be specified with:
+
+*   A logical value: the default value `scale=TRUE` means scaling is done by dividing the (centered) columns of x by their standard deviations if center is TRUE, and the root mean square otherwise. If scale is FALSE, no scaling is done.
+*   A numeric vector of length equal to the number of columns of the input data: scaling is done by each column divided by the corresponding value from scale. 
+
+Now we use the `mfa()` on the 'wine' data set, choose to output the first 7 components and store the model returned in `mfa_wine`:
+```{r,results='hide',warning=F,messages=F}
+varlist<-list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53)
+mfa_wine<-mfa(wine,sets=varlist,ncomps=7,center=TRUE,scale=TRUE)
+```
+Use `slotNames(mfa_wine)` we can see elements of `mfa_wine` model we just created:
+```{r,results='hide',warnings=F,messages=F}
+slotNames(mfa_wine)
+```
+And use `@` operatior to extract elements of the `mfa_wine` model
+```{r,warnings=F,messages=F}
+mfa_wine@eigenvalues
+```
+```{r,warnings=F,messages=F}
+mfa_wine@common_factor_score
+```
+```{r,warnings=F,messages=F}
+mfa_wine@partial_factor_score[1]
+```
+```{r,warnings=F,messages=F}
+head(mfa_wine@loadings)
+```
+
+### 2.3 print
+
 ```{r}
 print(mfa_wine)
 ```
-### 2.4 plot()
-```{r}
+
+### 2.4 plot
+
+```{r, out.width = '720px', out.length = '700px',dpi=500,fig.asp=0.8,fig.width=9,fig.length=5,fig.align='center',message=F,results='hide'}
+plot(mfa_wine,dim=c(1,2),singleoutput=NULL)
+```
+```{r, out.width = '500px', out.length = '500px',dpi=500,fig.width=6,fig.asp=0.8,fig.align='center',message=F,results='hide'}
 plot(mfa_wine,dim=c(1,2),singleoutput='eig')
 ```
-```{r,echo=F}
+```{r, out.width = '500px', out.length = '500px',dpi=500,fig.width=6,fig.asp=0.8,fig.align='center',message=FALSE,results='hide'}
 plot(mfa_wine,dim=c(1,2),singleoutput='com')
 ```
-```{r,echo=F}
+```{r, out.width = '720px', out.length = '600px',dpi=500,fig.width=9,fig.asp=0.5,message=FALSE,fig.align='right',results='hide'}
 plot(mfa_wine,dim=c(1,2),singleoutput='pat')
 ```
-### 2.5 eigenvalues()
+
+### 2.5 eigenvalues
+
 ```{r}
 eigenvalues(mfa_wine)
 ```
+
 ### 2.6 contributions()
+
 ```{r}
 contributions(mfa_wine)
 ```
+
 ## 2.7 RV()
 ## 2.8 RV_table()
 ## 2.9 LG()

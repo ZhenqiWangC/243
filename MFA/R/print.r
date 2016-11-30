@@ -1,8 +1,15 @@
 #'Pringting MFAs
 #'
-#' @title Pringting calss mfa
-
+#' @title Pringt Method for \code{mfa} Object
+#' @description Pringting an \code{mfa} object.
+#' @param x an object of class \code{"mfa"}
+#' @return Some summary information about the \code{mfa} object:
+#' @return The number of components
+#' @return The eigenvalue of the first component
+#' @return The eigenvalue of the second component
 #' @export
+#' @example 
+#' 
 
 # set print() to print basic infomation
 setMethod("print",

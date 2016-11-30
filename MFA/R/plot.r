@@ -22,18 +22,35 @@ partial_plot<-function(group_num,data,data2,names){
     # center (0,0)
     ggplot2::xlim(-max(abs(c(data[,1],data2[,1])))*1.2, max(abs(c(data[,1],data2[,1])))*1.2)+
     ggplot2::ylim(-max(abs(c(data[,2],data2[,2])))*1.2, max(abs(c(data[,2],data2[,2])))*1.2)+
-    ggplot2::ggtitle(paste0("Partial Factor Score: Group ",group_num))+ggplot2::labs(x=names[1],y=names[2])
+    ggplot2::ggtitle(paste0("Partial Score: Group ",group_num))+ggplot2::labs(x=names[1],y=names[2])
 }
 
-#' @title plot method
+#' @title Plot Method for \code{mfa} Object
 #' @description Returns plots of eigenvalues, compromise factor scores and partial factor score
-#' @param x a R object of mfa
+#' @param x a R object of \code{mfa}
 #' @param dim a integer vector of two values
 #' @param singleoutput a character value among ('eig','com','par') indicating which graph to output
+#' @return plots of \code{mfa} Object
 #' @export
+#' @examples 
+#' # default
+#' 
+#' # other dimentions
+#' 
+#' # single output
+#' 
+#' 
 
 setMethod("plot",signature="mfa",
-          function(x,dim,singleoutput=NULL){
+          function(x,dim=c(1,2),singleoutput=NULL){
+            if(length(dim)!=2) {stop("dim should be a integer vector of two values.")}
+            if(any(!dim%in%1:length(x@eigenvalues))) {stop("dim out of bounds.")}
+            if(!is.null(singleoutput)){
+              if(!singleoutput%in%c("eig","com","par")) {
+                stop("singleoutput can only take a character value among 'eig','com','par'.")
+              }
+            }
+            
             blankPlot <- ggplot2::ggplot()+ggplot2::geom_blank(ggplot2::aes(1,1))+
               ggplot2::theme(
                 plot.background = ggplot2::element_blank(),
@@ -132,19 +149,19 @@ setMethod("plot",signature="mfa",
               plist[[i]]<-plot
             }
 
-
             # arrange output
             if (is.null(singleoutput)){
-              p3<-do.call(get("grid.arrange", asNamespace("gridExtra")),c(plist,ncol=5,top=""))
+              p3<-do.call(get("arrangeGrob", asNamespace("gridExtra")),c(plist,ncol=5,top=""))
             if (length(sets)==10){
               p<-gridExtra::grid.arrange(blankPlot,p1,p2,p3,ncol=6, nrow=2, widths=c(1,1,1,1,1,1), heights=c(3, 6),layout_matrix = rbind(c(1,3,3,2,2,1), c(4,4,4,4,4,4)))
 
               jpeg("mfa.jpeg", width = 14, height = 9, units = 'in', res = 1000)
-              gridExtra::grid.arrange(blankPlot,p1,p2,p3,ncol=6, nrow=2, widths=c(1,1,1,1,1,1), heights=c(3, 6),layout_matrix = rbind(c(1,3,3,2,2,1), c(4,4,4,4,4,4)))
+              p
               dev.off()
               print(p)
               cat(" 'mfa.jpeg' is saved in the current folder")
-            }else{p3<-do.call(get("grid.arrange", asNamespace("gridExtra")),c(plist,ncol=floor(sqrt(length(sets))),top=""))
+            }else{
+              p3<-do.call(get("arrangeGrob", asNamespace("gridExtra")),c(plist,ncol=floor(sqrt(length(sets))),top=""))
             p<-gridExtra::grid.arrange(p1,p2,p3,ncol=3)
             jpeg("mfa.jpeg", width = 14, height = 9, units = 'in', res = 1000)
             gridExtra::grid.arrange(p1,p2,p3,ncol=3)
@@ -172,7 +189,7 @@ setMethod("plot",signature="mfa",
                 jpeg("mfa.jpeg", width = 14, height = 9, units = 'in', res = 1000)
                 do.call(get("grid.arrange", asNamespace("gridExtra")),c(plist,ncol=5,top=""))
                 dev.off()
-                print(p3<-do.call(get("grid.arrange", asNamespace("gridExtra")),c(plist,ncol=5,top="")))
+                print(do.call(get("grid.arrange", asNamespace("gridExtra")),c(plist,ncol=5,top="")))
                 cat(" 'mfa.jpeg' is saved in the current folder")
 
             }}
