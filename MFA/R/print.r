@@ -9,7 +9,8 @@
 #' @return The eigenvalue of the second component
 #' @export
 #' @examples 
-#' 
+#' test<-mfa(wine,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53))
+#' print(test)
 
 # set print() to print basic infomation
 setMethod("print",

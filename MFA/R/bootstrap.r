@@ -7,24 +7,20 @@
 #' @return a matrix of bootstrap ratio
 #' @export
 #' @examples
-#' # default 
-#' ndatas<-apply(wine_data,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
-#' test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),center=FALSE,scale=FALSE)
-#' bootstrap(test,1000)
+#' ndatas<-apply(wine,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
+#' test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),
+#'           center=FALSE,scale=FALSE)
+#' 
+#' # default
+#' bootstrap(test)
+#' 
+#' # change size 
+#' bootstrap(test,nbt=5000)
 
 setGeneric("bootstrap",function(object,nbt=1000)standardGeneric("bootstrap"))
 
-#' @title Bootstrap Method for \code{mfa} Object
-#' @description Return a matrix of bootstrap ratio.
-#' @param object an \code{mfa} object
-#' @param nbt a positive integer of a bootstrap sample size
-#' @return a matrix of bootstrap ratio
+
 #' @export
-#' @examples
-#' # default 
-#' ndatas<-apply(wine_data,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
-#' test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),center=FALSE,scale=FALSE)
-#' bootstrap(test,1000)
 
 setMethod("bootstrap",signature="mfa",
           function(object,nbt=1000){

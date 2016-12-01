@@ -33,13 +33,20 @@ partial_plot<-function(group_num,data,data2,names){
 #' @return plots of \code{mfa} Object
 #' @export
 #' @examples
+#' ndatas<-apply(wine,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
+#' test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),
+#'           center=FALSE,scale=FALSE)
+#' 
 #' # default
-#'
+#' plot(test)
+#' 
 #' # other dimentions
-#'
+#' plot(test,dim=c(2,3))
+#' 
 #' # single output
-#'
-#'
+#' plot(test,singleoutput="eig")
+#' plot(test,singleoutput="com")
+#' plot(test,singleoutput="par")
 
 setMethod("plot",signature="mfa",
           function(x,dim=c(1,2),singleoutput=NULL){
