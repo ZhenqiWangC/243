@@ -24,7 +24,11 @@ test_that("check numeric sets",{
                "sets should be a list of numeric vectors or character vectors.")
   expect_error(mfa(wine,sets = list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49)),
                "The sum of sets lengths does not equal to the number of columns.")
-  ##expect_error(mfa(wine,sets = list(1:5,3:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53)))
+  expect_error(mfa(wine,sets = list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,51:54)),
+               "Some sets are out of the range of column number of the origin dataset.")
+  expect_message(expect_warning(mfa(wine,sets = list(1:5,5:11,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53)),
+               "sets contain some overlapped and skipped columns."),
+               "Matrix is singular: outputing 11 dimensions.")
 })
 
 test_that("check character sets",{
@@ -77,6 +81,7 @@ test_that("check singularity and ncomps",{
 })
 
 test_that("check plot input",{
+  test <- mfa(wine,testset)
   expect_error(plot(test,dim=1),"dim should be a integer vector of two values.")
   expect_error(plot(test,dim=c(12,1)),"dim out of bounds.")
   expect_error(plot(test,dim=c(1,1),singleoutput = "cm"),
