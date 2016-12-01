@@ -1,7 +1,10 @@
 ---
 title: "An Overview of the MFA package"
 author:
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette:
+    toc: true # table of content true
+    depth: 4  # upto three depths of headings (specified by #, ## and ###)
 vignette: >
   %\VignetteIndexEntry{MFA}
   %\VignetteEngine{knitr::rmarkdown}
@@ -227,6 +230,9 @@ To run any of the MFA functions, it is necessary to make the package active by u
 ```{r}
 library(MFA)
 ```
+
+#### Prepare the input data
+
 The data on which we apply MFA functions should be either data frame or matrix object in R. The users could of course read data from a local file and here are of course many ways to enter data into R, just make sure prepare the data to be analyzed as data frame or matrix. The data example 'wine' has been loaded in the global environment in R when loading the MFA package, we can use head( ) to check the 'wine' data. As the data example is of many variables, we will choose the first 12 to show:
 ```{r }
 head(wine)[,1:12]
@@ -368,7 +374,7 @@ As there are quite a few variables, we use `head()` to display the first several
 head(contributions(mfa_wine)$variables)
 ```
 
-## 3.7 RV and LG
+### 3.7 RV and LG
 
 `RV()` takes two groups of data and return the $R_v$ Coefficient between them. Likewise, `LG()`takes two groups of data and return the $L_g$ Coefficient between them. To see detailed explanation of these two types of coeffecients, see [2.8 $R_v$ Coefficient and $L_g$ Coefficient](#anchor_co).
 The usage of `RV()` is:
@@ -388,7 +394,7 @@ table2<-scale(wine[,7:12])
 LG(table1,table2)
 ```
 
-## 3.8 RV_table and LG_table
+### 3.8 RV_table and LG_table
 
 `RV_table()` takes a data set and a list with sets of variables, and return a symmetric matrix of $R_v$ Coefficients, and a symmetric matrix of $L_g$ coefficients for `LG_table()`. To see detailed explanation, see [2.8 $R_v$ Coefficient and $L_g$ Coefficient](#anchor_co).
 The usage of `RV_table()` is:
@@ -406,7 +412,7 @@ nor_wine<-scale(wine[,1:18])
 LG_table(nor_wine,sets=list(1:6,7:12,13:18))
 ```
 
-## 3.9 bootstrap
+### 3.9 bootstrap
 MFA is a descriptive multivariate technique, but it is often important to be able to complement the descriptive conclusions of an analysis by assessing if its results are reliable and replicable. `bootstrap()` is a function that takes the output of `mfa()` and return the boostrap ratio (by dividing each bootstrap mean by its standard deviation) of the compromise factor scores. To see the detailed explanation of how `bootstrap()`estimates the stability of the compromise factor scores, see [2.9 Bootstrap for Factor Scores](#anchor_bs). The useage of `bootstrap()` is:
 ```{r,eval=FALSE}
 bootstrap(object,nbt=1000)
@@ -417,3 +423,25 @@ Use `bootstrap()` on our 'mfa_wine' to get the bootstrap ratios:
 ```{r}
 bootstrap(mfa_wine,nbt=10000)
 ```
+
+# 4 Shiny App
+
+We have created a Shiny App for visualization of the output of this package. Please see our Shiny App at [MFA Shiny App](https://zyz2012.shinyapps.io/ShinyApp/)In this part, we will give a brief introduction about how to use the shiny app to do multiple factor analysis. Users are required to give the inputs including **data**,**set**, and the **dimesions** of the outcomes which they want to plot. 
+
+## Input
+`data`: Users should choose data of **.csv** format with the header. If nothing is chosen, the shiny app will plot the outcome of the *wine.csv* as default.
+
+`sets`: Users should choose sets of **.txt** format. The .txt file should have the sets of the format below:
+$$1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:53$$
+(Use "**,**" to seperate different groups, and "**:**" to separate the starting and ending columns in the data set)
+If *sets* is not given, the shiny app will plot the outcome of the *sets.txt* as an example.
+
+`dim`: Usually, **dim** equals **c(1,2)** to assign the most important two components.
+
+##Output
+`A table` shows the outcome of eigenvalues, partial factor scores, common factor scores and loadings respectively.
+`Four pictures` show the outcome of eigenvalues, partial factor scores, common factor scores and loadings.
+
+**Notes**
+1.When plotting the outcome of partial factor scores, it may take some time due to the large size of the picture.
+

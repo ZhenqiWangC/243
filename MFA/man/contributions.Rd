@@ -22,6 +22,9 @@ A list of tables:
 Returns a list of tables with contribution informations.
 }
 \examples{
-
+ndatas<-apply(wine,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
+test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),
+          center=FALSE,scale=FALSE)
+contributions(test)
 }
 

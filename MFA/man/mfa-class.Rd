@@ -44,38 +44,40 @@ Constructor method of mfa Class.
 }
 \examples{
 # default
-test<-mfa(wine_data,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53))
+test<-mfa(wine,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53))
 
 # use your own scale method
 #scale with vector
-test<-mfa(wine_data,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),
+test<-mfa(wine,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),
           center = apply(wine_data,2,mean),scale = apply(wine_data,2,sd))
 # scale in advance
-ndatas<-apply(wine_data,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
-test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),center=FALSE,scale=FALSE)
+ndatas<-apply(wine,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
+test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),
+          center=FALSE,scale=FALSE)
 
 # only print the first two components
-ndatas<-apply(wine_data,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
-test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),ncomp=2,center=FALSE,scale=FALSE)
+ndatas<-apply(wine,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
+test<-mfa(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53),
+          ncomp=2,center=FALSE,scale=FALSE)
 
 # character sets
-ndatas<-apply(wine_data,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
+ndatas<-apply(wine,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
 # Use the first and last variable names of each group:
-test<-mfa(ndatas,sets=list(c("V1","V6"),c("V1.1","V8"),c("V1.2","V10"),c("V1.3","V8.1"),
-                           c("V1.4","V12"),c("V1.5","V13"),c("V1.6","V4.6"),
-                           c("V1.7","V5.1"),c("V1.8","V15"),c("V1.9","V4.9")
-                           ),scale = F, center = F)
+test<-mfa(ndatas,sets=list(c("V1.G1","V6.G1"),c("V1.G2","V8.G2"),c("V1.G3","V10.G3"),
+                           c("V1.G4","V8.G4"),c("V1.G5","V12.G5"),c("V1.G6","V13.G6"),
+                           c("V1.G7","V4.G7"),c("V1.G8","V5.G8"),c("V1.G9","V15.G9"),
+                           c("V1.G10","V4.G10")),scale = F, center = F)
 # or use the full list of variable names of each group:
-test<-mfa(ndatas,sets=list(c("V1","V2","V3","V4","V5","V6"),
-                           c("V1.1","V2.1","V3.1","V4.1","V7","V8"),
-                           c("V1.2","V2.2","V3.2","V4.2","V9","V10"),
-                           c("V1.3","V2.3","V3.3","V4.3","V8.1"),
-                           c("V1.4","V2.4","V3.4","V4.4","V11","V12"),
-                           c("V1.5","V2.5","V3.5","V4.5","V13"),
-                           c("V1.6","V2.6","V3.6","V4.6"),
-                           c("V1.7","V2.7","V3.7","V4.7","V14","V5.1"),
-                           c("V1.8","V2.8","V3.8","V4.8","V15"),
-                           c("V1.9","V2.9","V3.9","V4.9")
+test<-mfa(ndatas,sets=list(c("V1.G1","V2.G1","V3.G1","V4.G1","V5.G1","V6.G1"),
+                           c("V1.G2","V2.G2","V3.G2","V4.G2","V7.G2","V8.G2"),
+                           c("V1.G3","V2.G3","V3.G3","V4.G3","V9.G3","V10.G3"),
+                           c("V1.G4","V2.G4","V3.G4","V4.G4","V8.G4"),
+                           c("V1.G5","V2.G5","V3.G5","V4.G5","V11.G5","V12.G5"),
+                           c("V1.G6","V2.G6","V3.G6","V4.G6","V13.G6"),
+                           c("V1.G7","V2.G7","V3.G7","V4.G7"),
+                           c("V1.G8","V2.G8","V3.G8","V4.G8","V14.G8","V5.G8"),
+                           c("V1.G9","V2.G9","V3.G9","V4.G9","V15.G9"),
+                           c("V1.G10","V2.G10","V3.G10","V4.G10")
                            ),scale = F, center = F)
 }
 
