@@ -7,8 +7,9 @@
 #' @export
 #' @examples
 #' # default 
-#' x1 <- scale(wine_data[,1:6])
-#' x2 <- scale(wine_data[,7:12])
+#' ndatas<-apply(wine,2,function(x){ (x-mean(x))/norm(x-mean(x),type="2")})
+#' x1 <- ndatas[,1:6]
+#' x2 <- ndatas[,7:12]
 #' RV(x1,x2)
 
 # set funtion RV() to take two tables and return rv coefficient
