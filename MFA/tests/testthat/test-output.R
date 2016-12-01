@@ -1,3 +1,4 @@
+context("Test MFA output")
 testthat::test_that("TestOutPut",{
   testdata = scale(mtcars)
   testset = list(1:5,6:11)

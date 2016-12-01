@@ -10,7 +10,7 @@
 #' nadtas <- scale(wine_data)
 #' RV_table(ndatas,sets=list(1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:49,50:53))
 RV_table <- function(dataset,sets){
-  if(!is.data.frame(dataset)&!is.matrix(dataset)){stop("dataset must be a matrix or a dataframe")}
+  if(!is.data.frame(dataset)&!is.matrix(dataset)){stop("dataset must be a matrix or a dataframe.")}
   dataset <-as.matrix(dataset)
   if(!is.numeric(dataset)) {stop("dataset must be a numeric matrix or dataframe.")}
   
