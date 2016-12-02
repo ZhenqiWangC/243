@@ -39,7 +39,7 @@ Overview
 
 - `Centering and Scaling`：first normalize each column such that its mean is equal to 0 and the sum of the square values of all its elements is equal to 1. 
 
-- `Concatenating data tables`：The raw data consist of K data sets collected on the same observations. The $K$ data matrices $\textbf{X}_{[k]}$ are concatenated into the complete $I$ by $J$ data matrix denoted by $\textbf{X}$:
+- `Concatenating data tables`：The raw data consist of K data sets collected on the same observations. The $K$ data matrices $\textbf{X}_{[k]}$ are concatenated into the complete $I$ by $J$ data matrix denoted by $\textbf{X}$.
 
 --- .class #id3
 
@@ -54,7 +54,7 @@ $$\begin{equation}
 
 - `Weight Matrix` has its diagonal elements as the inverse of the first squared singular value multiplied by a $J_{[k]}$ vector of ones:
 $$\begin{equation}
-\textbf{a}=[\alpha_1\textbf{1}_{[1]}^T,...,\alpha_k\textbf{1}_{[k]}^T,...,\alpha_K\textbf{1}_{[K]}^T],
+\textbf{a}=[\alpha_1\textbf{1}_{[1]}^T,...,\alpha_k\textbf{1}_{[k]}^T,...,\alpha_K\textbf{1}_{[K]}^T]
 \end{equation}$$
 
 

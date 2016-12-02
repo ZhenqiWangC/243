@@ -39,7 +39,7 @@ Overview
 
 - `Centering and Scaling`：first normalize each column such that its mean is equal to 0 and the sum of the square values of all its elements is equal to 1. 
 
-- `Concatenating data tables`：The raw data consist of K data sets collected on the same observations. The $K$ data matrices $\textbf{X}_{[k]}$ are concatenated into the complete $I$ by $J$ data matrix denoted by $\textbf{X}$:
+- `Concatenating data tables`：The raw data consist of K data sets collected on the same observations. The $K$ data matrices $\textbf{X}_{[k]}$ are concatenated into the complete $I$ by $J$ data matrix denoted by $\textbf{X}$.
 
 --- .class #id3
 
@@ -54,7 +54,7 @@ $$\begin{equation}
 
 - `Weight Matrix` has its diagonal elements as the inverse of the first squared singular value multiplied by a $J_{[k]}$ vector of ones:
 $$\begin{equation}
-\textbf{a}=[\alpha_1\textbf{1}_{[1]}^T,...,\alpha_k\textbf{1}_{[k]}^T,...,\alpha_K\textbf{1}_{[K]}^T],
+\textbf{a}=[\alpha_1\textbf{1}_{[1]}^T,...,\alpha_k\textbf{1}_{[k]}^T,...,\alpha_K\textbf{1}_{[K]}^T]
 \end{equation}$$
 
 
@@ -592,10 +592,10 @@ bootstrap(mfa_wine,nbt=10000)[1:3,1:5]
 ```
 
 ```
-##           Dim1       Dim2        Dim3      Dim4     Dim5
-## NZ1 -25.481290 -1.2747976  0.39458327 0.8004617 1.593285
-## NZ2  -9.904332 -0.3266574 -1.42205785 2.4277123 1.743398
-## NZ3  -8.302469  5.2914068  0.07805533 0.8928479 0.616766
+##           Dim1       Dim2        Dim3      Dim4      Dim5
+## NZ1 -25.094770 -1.2825989  0.36705563 0.8094538 1.5787006
+## NZ2 -10.013120 -0.3085553 -1.41405971 2.4291634 1.7460660
+## NZ3  -8.382479  5.2860679  0.05070739 0.8885004 0.6088556
 ```
 
 --- .class #id34
