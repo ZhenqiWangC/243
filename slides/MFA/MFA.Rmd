@@ -100,11 +100,11 @@ ctr_{k,l}=\sum_j^{J_{[k]}} ctr_{j,l}
 
 ##  Maths behind
 
-- `$R_V$  coefficient` between data tables $k$ and $k′$ is computed as
+- `R_V  coefficient` between data tables $k$ and $k′$ is computed as
 $$\begin{equation}
 \frac{\text{tr}\{(X_{[k]}X_{[k]}^T) \times (X_{[k']}X_{[k']}^T)\}}{\sqrt{\text{tr}\{(X_{[k]}X_{[k]}^T)\times (X_{[k]}X_{[k]}^T)\}\times \text{tr}\{(X_{[k']}X_{[k']}^T)\times (X_{[k']}X_{[k']}^T)\}}}
 \end{equation}$$
-- `$L_g$  coefficient` between data tables $k$ and $k′$ is computed as
+- `L_g  coefficient` between data tables $k$ and $k′$ is computed as
 $$\begin{equation}
 \begin{aligned}
 \frac{\text{tr}\{(X_{[k]}X_{[k]}^T)× (X_{[k']}X_{[k']}^T)\}}{\gamma_{1,k}^2 × \gamma_{1,k'}^2}
@@ -139,7 +139,7 @@ scales, using four standard variables plus extra variables if any aseessor feels
 
 The data on which we apply MFA functions should be either data frame or matrix object in R. The users could of course read data from a local file and here are of course many ways to enter data into R, just make sure prepare the data to be analyzed as data frame or matrix. The data example 'wine' has been loaded in the global environment in R when loading the MFA package. Here we show part of the 'wine' data:
 ```{r }
-wine[1:5,1:6]
+wine[1:3,1:6]
 ```
 
 --- .class #id10
@@ -230,7 +230,7 @@ Use `@` operatior to extract elements of the 'mfa_wine' model
 mfa_wine@eigenvalues
 ```
 ```{r,warnings=F,messages=F}
-mfa_wine@common_factor_score[1:3,1:5]
+mfa_wine@common_factor_score[1:2,1:5]
 ```
 
 --- .class #id17
@@ -355,10 +355,10 @@ contributions(mfa_wine)$observations[1:3,1:5]
 ## Contributions( )
 
 ```{r}
-contributions(mfa_wine)$table[1:3,1:5]
+contributions(mfa_wine)$table[1:2,1:5]
 ```
 ```{r}
-contributions(mfa_wine)$variables[1:3,1:5]
+contributions(mfa_wine)$variables[1:2,1:5]
 ```
 
 --- .class #id29

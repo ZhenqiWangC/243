@@ -100,11 +100,11 @@ ctr_{k,l}=\sum_j^{J_{[k]}} ctr_{j,l}
 
 ##  Maths behind
 
-- `$R_V$  coefficient` between data tables $k$ and $k′$ is computed as
+- `R_V  coefficient` between data tables $k$ and $k′$ is computed as
 $$\begin{equation}
 \frac{\text{tr}\{(X_{[k]}X_{[k]}^T) \times (X_{[k']}X_{[k']}^T)\}}{\sqrt{\text{tr}\{(X_{[k]}X_{[k]}^T)\times (X_{[k]}X_{[k]}^T)\}\times \text{tr}\{(X_{[k']}X_{[k']}^T)\times (X_{[k']}X_{[k']}^T)\}}}
 \end{equation}$$
-- `$L_g$  coefficient` between data tables $k$ and $k′$ is computed as
+- `L_g  coefficient` between data tables $k$ and $k′$ is computed as
 $$\begin{equation}
 \begin{aligned}
 \frac{\text{tr}\{(X_{[k]}X_{[k]}^T)× (X_{[k']}X_{[k']}^T)\}}{\gamma_{1,k}^2 × \gamma_{1,k'}^2}
@@ -141,7 +141,7 @@ scales, using four standard variables plus extra variables if any aseessor feels
 The data on which we apply MFA functions should be either data frame or matrix object in R. The users could of course read data from a local file and here are of course many ways to enter data into R, just make sure prepare the data to be analyzed as data frame or matrix. The data example 'wine' has been loaded in the global environment in R when loading the MFA package. Here we show part of the 'wine' data:
 
 ```r
-wine[1:5,1:6]
+wine[1:3,1:6]
 ```
 
 ```
@@ -149,8 +149,6 @@ wine[1:5,1:6]
 ## NZ1     8     6     7     4     1     6
 ## NZ2     7     5     8     1     2     8
 ## NZ3     6     5     6     5     3     4
-## NZ4     9     6     8     4     3     5
-## FR1     2     2     2     8     7     3
 ```
 
 --- .class #id10
@@ -262,14 +260,13 @@ mfa_wine@eigenvalues
 ```
 
 ```r
-mfa_wine@common_factor_score[1:3,1:5]
+mfa_wine@common_factor_score[1:2,1:5]
 ```
 
 ```
-##           Dim1        Dim2        Dim3      Dim4       Dim5
-## NZ1 -0.9802057 -0.16325474  0.02833247 0.1229674 0.13896026
-## NZ2 -0.8088651 -0.03262348 -0.16181752 0.3768692 0.20138027
-## NZ3 -0.7610058  0.45418702  0.00567849 0.1346319 0.06141266
+##           Dim1        Dim2        Dim3      Dim4      Dim5
+## NZ1 -0.9802057 -0.16325474  0.02833247 0.1229674 0.1389603
+## NZ2 -0.8088651 -0.03262348 -0.16181752 0.3768692 0.2013803
 ```
 
 --- .class #id17
@@ -458,25 +455,23 @@ contributions(mfa_wine)$observations[1:3,1:5]
 
 
 ```r
-contributions(mfa_wine)$table[1:3,1:5]
+contributions(mfa_wine)$table[1:2,1:5]
 ```
 
 ```
 ##           Dim1       Dim2       Dim3       Dim4       Dim5
 ## [1,] 0.1011327 0.09540216 0.09905229 0.06536089 0.07844541
 ## [2,] 0.1000578 0.06849423 0.12251404 0.03382958 0.10011471
-## [3,] 0.1010511 0.15169038 0.06291732 0.19875141 0.04113903
 ```
 
 ```r
-contributions(mfa_wine)$variables[1:3,1:5]
+contributions(mfa_wine)$variables[1:2,1:5]
 ```
 
 ```
-##             Dim1       Dim2         Dim3        Dim4        Dim5
-## V1.G1 0.02088509 0.02441275 0.0004351826 0.008871800 0.001100520
-## V2.G1 0.01712210 0.01484237 0.0193072914 0.001874702 0.030433043
-## V3.G1 0.01628702 0.03777058 0.0018843258 0.001726045 0.009659911
+##             Dim1       Dim2         Dim3        Dim4       Dim5
+## V1.G1 0.02088509 0.02441275 0.0004351826 0.008871800 0.00110052
+## V2.G1 0.01712210 0.01484237 0.0193072914 0.001874702 0.03043304
 ```
 
 --- .class #id29
@@ -597,10 +592,10 @@ bootstrap(mfa_wine,nbt=10000)[1:3,1:5]
 ```
 
 ```
-##           Dim1      Dim2       Dim3      Dim4      Dim5
-## NZ1 -25.500603 -1.271035  0.3725185 0.8144828 1.6202365
-## NZ2 -10.124182 -0.298934 -1.4407989 2.4141904 1.7915706
-## NZ3  -8.439366  5.258444  0.0549251 0.9049349 0.6283187
+##           Dim1       Dim2        Dim3      Dim4     Dim5
+## NZ1 -25.481290 -1.2747976  0.39458327 0.8004617 1.593285
+## NZ2  -9.904332 -0.3266574 -1.42205785 2.4277123 1.743398
+## NZ3  -8.302469  5.2914068  0.07805533 0.8928479 0.616766
 ```
 
 --- .class #id34
