@@ -2,10 +2,10 @@ Package: MFA
 Title: Multiple Factor Analysis (MFA)
 Version: 0.0.1.0000
 Authors@R: c(
-    person("Zhenqi", "Wang", email = "zhen_qi@berkeley.edu", role = c("aut", "cre"),
-    person("Mingjia", "Chen", email = "mingjia_chen@berkeley.edu", role = c("aut", "cre"),
-    person("Ruonan", "Hao", email = "ruonan_hao@berkeley.edu", role = c("aut", "cre"),
-    person("Yizhou", "Zhao", email = "yizhou_zhao@berkeley.edu", role = c("aut", "cre")
+    person("Zhenqi", "Wang", email = "zhen_qi@berkeley.edu", role = c("aut", "cre")),
+    person("Mingjia", "Chen",role = c("aut")),
+    person("Ruonan", "Hao", role = c("aut")),
+    person("Yizhou", "Zhao", role = c("aut"))
     )
 Description: Multiple factor analysis (MFA, also called multiple factorial analysis) is an generalization of principal component analysis (PCA). Its goal is to analyze several data sets of variables collected on the same set of observations, or—as in its dual version—several sets of observations measured on the same set of variables. 
 Depends:
