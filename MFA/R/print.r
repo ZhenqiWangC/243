@@ -3,6 +3,7 @@
 #' @title Pringt Method for \code{mfa} Object
 #' @description Pringting an \code{mfa} object.
 #' @param x an object of class \code{"mfa"}
+#' @param ... more arguments
 #' @return Some summary information about the \code{mfa} object:
 #' @return The number of components
 #' @return The eigenvalue of the first component

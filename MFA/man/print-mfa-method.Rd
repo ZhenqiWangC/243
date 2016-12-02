@@ -9,6 +9,8 @@
 }
 \arguments{
 \item{x}{an object of class \code{"mfa"}}
+
+\item{...}{more arguments}
 }
 \value{
 Some summary information about the \code{mfa} object:
