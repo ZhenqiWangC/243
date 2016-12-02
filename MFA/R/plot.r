@@ -26,6 +26,7 @@ partial_plot<-function(group_num,data,data2,names){
 }
 
 #' @title Plot Method for \code{mfa} Object
+#' @rdname plot-mfa-method
 #' @description Returns plots of eigenvalues, compromise factor scores and partial factor score.
 #' @param x a R object of \code{mfa}
 #' @param dim a integer vector of two values
