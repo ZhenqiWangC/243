@@ -66,10 +66,9 @@ plot_common <- function(x,dim){
 partial_plot<-function(group_num,data,data2,names){
   p = ggplot2::ggplot()+
     ## ?refer color table
-    ggplot2::geom_point(data=data,ggplot2::aes(x=data[,1],y=data[,2]),color = defaultColors[1:length(data[,1])],size=2)+
-    ggplot2::scale_color_manual(name = element_blank(),labels=rownames(data),values = defaultColors[1:length(data[,1])])+
-    ggplot2::geom_point(data=data2,ggplot2::aes(x=data2[,1],y=data2[,2]),color="grey10",shape=17,size=1.5)+
-    ggplot2::geom_text(data=data2,ggplot2::aes(x=data2[,1],y=data2[,2],label=rownames(data2)),size=2,color="black",hjust=-0.15, vjust=-0.05)+
+    ggplot2::geom_point(data=data,ggplot2::aes(x=data[,1],y=data[,2],color = id),size=6)+
+    ggplot2::geom_point(data=data2,ggplot2::aes(x=data2[,1],y=data2[,2]),color="grey10",shape=17,size=2)+
+    ggplot2::geom_text(data=data2,ggplot2::aes(x=data2[,1],y=data2[,2],label=rownames(data2)),size=3,color="black",hjust=-0.15, vjust=-0.05)+
     ggplot2::scale_shape_manual(values=group_num+1)+
     ggplot2::theme(plot.title = ggplot2::element_text(size=22, face="bold",vjust=0.05,color="grey40"),
                    axis.title.x = ggplot2::element_text(size=18, face="bold",vjust=-0.05,color="grey40"),
@@ -83,8 +82,8 @@ partial_plot<-function(group_num,data,data2,names){
                    panel.background = ggplot2::element_blank())+
     # plot x and y axis
     ggthemes::scale_color_calc()+
-    ggplot2::annotate("segment", x=-Inf,xend=Inf,y=0,yend=0,arrow=ggplot2::arrow(length=ggplot2::unit(0.3,"cm")),size=0.5,color="grey50") +
-    ggplot2::annotate("segment", y=-Inf,yend=Inf,x=0,xend=0,arrow=ggplot2::arrow(length=ggplot2::unit(0.3,"cm")),size=0.5,color="grey50")+
+    ggplot2::annotate("segment", x=-Inf,xend=Inf,y=0,yend=0,arrow=ggplot2::arrow(length=ggplot2::unit(0.3,"cm")),size=0.8,color="grey50") +
+    ggplot2::annotate("segment", y=-Inf,yend=Inf,x=0,xend=0,arrow=ggplot2::arrow(length=ggplot2::unit(0.3,"cm")),size=0.8,color="grey50")+
     # center (0,0)
     ggplot2::xlim(-max(abs(c(data[,1],data2[,1])))*1.2, max(abs(c(data[,1],data2[,1])))*1.2)+
     ggplot2::ylim(-max(abs(c(data[,2],data2[,2])))*1.2, max(abs(c(data[,2],data2[,2])))*1.2)+
