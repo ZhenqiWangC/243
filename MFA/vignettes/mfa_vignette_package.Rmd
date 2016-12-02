@@ -429,7 +429,7 @@ bootstrap(mfa_wine,nbt=10000)
 We have created a Shiny App for visualization of the output of this package. Please see our Shiny App at [MFA Shiny App](https://zyz2012.shinyapps.io/ShinyApp/)In this part, we will give a brief introduction about how to use the shiny app to do multiple factor analysis. Users are required to give the inputs including **data**,**set**, and the **dimesions** of the outcomes which they want to plot. 
 
 ## Input
-`data`: Users should choose data of **.csv** format with the header. If nothing is chosen, the shiny app will plot the outcome of the *wine.csv* as default.
+`data`: Users should choose data of **.csv** format with the header and with the first column as the id. If nothing is chosen, the shiny app will plot the outcome of the *wine.csv* as default.
 
 `sets`: Users should choose sets of **.txt** format. The .txt file should have the sets of the format below:
 $$1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:53$$
