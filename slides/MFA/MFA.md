@@ -1,14 +1,15 @@
 ---
-title       : MFA package
-subtitle    : Stat 243 Final Project, UC Berkeley
-author      : Ruonan HAO, Mingjia CHEN, Yizhou ZHAO, Zhenqi WANG
-job         : 
-framework   : io2012      # {io2012, html5slides, shower, dzslides, ...}
-highlighter : prettify  # {highlight.js, prettify, highlight}
-hitheme     : tomorrow      # 
-widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
-mode        : standalone # {standalone, draft}
-knit        : slidify::knit2slides
+title: "MFA package"
+author: "Ruonan HAO, Mingjia CHEN, Yizhou ZHAO, Zhenqi WANG"
+highlighter: prettify
+output: pdf_document
+job: null
+knit: slidify::knit2slides
+mode: selfcontained
+hitheme: tomorrow
+subtitle: Stat 243 Final Project, UC Berkeley
+framework: io2012
+widgets: mathjax
 ---
 
 ## Multiple Factor Analysis
@@ -596,10 +597,10 @@ bootstrap(mfa_wine,nbt=10000)[1:3,1:5]
 ```
 
 ```
-##           Dim1       Dim2        Dim3      Dim4      Dim5
-## NZ1 -25.342688 -1.2664955  0.36904887 0.8180149 1.6183276
-## NZ2 -10.168021 -0.3010757 -1.45127421 2.4336844 1.7939128
-## NZ3  -8.471071  5.2638050  0.04303642 0.9215069 0.6413829
+##           Dim1      Dim2       Dim3      Dim4      Dim5
+## NZ1 -25.500603 -1.271035  0.3725185 0.8144828 1.6202365
+## NZ2 -10.124182 -0.298934 -1.4407989 2.4141904 1.7915706
+## NZ3  -8.439366  5.258444  0.0549251 0.9049349 0.6283187
 ```
 
 --- .class #id34

@@ -1,14 +1,15 @@
 ---
-title       : MFA package
-subtitle    : Stat 243 Final Project, UC Berkeley
-author      : Ruonan HAO, Mingjia CHEN, Yizhou ZHAO, Zhenqi WANG
-job         : 
-framework   : io2012      # {io2012, html5slides, shower, dzslides, ...}
-highlighter : prettify  # {highlight.js, prettify, highlight}
-hitheme     : tomorrow      # 
-widgets     : [mathjax]            # {mathjax, quiz, bootstrap}
-mode        : selfcontained # {standalone, draft}
-knit        : slidify::knit2slides
+title: "MFA package"
+author: "Ruonan HAO, Mingjia CHEN, Yizhou ZHAO, Zhenqi WANG"
+highlighter: prettify
+output: pdf_document
+job: null
+knit: slidify::knit2slides
+mode: selfcontained
+hitheme: tomorrow
+subtitle: Stat 243 Final Project, UC Berkeley
+framework: io2012
+widgets: mathjax
 ---
 
 ## Multiple Factor Analysis
