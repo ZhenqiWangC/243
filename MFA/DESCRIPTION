@@ -2,7 +2,7 @@ Package: MFA
 Title: Multiple Factor Analysis (MFA)
 Version: 0.0.1.0000
 Authors@R: c(
-    person("Zhenqi", "Wang", email = "zhen_qi@berkeley.edu", role = c("aut", "cre")),
+    person("Zhenqi", "Wang", email = "zhenqi_wang@berkeley.edu", role = c("aut", "cre")),
     person("Mingjia", "Chen",role = c("aut")),
     person("Ruonan", "Hao", role = c("aut")),
     person("Yizhou", "Zhao", role = c("aut"))

@@ -259,7 +259,7 @@ mfa(data,sets,ncomps=NULL,center=TRUE,scale=TRUE)
 
 *   A list of numbers indicating column indicies of each data groups: e.g., for this wine data set if we only want to analyze the first two groups, we specify `sets=list(1:6,7:12)` means columns 1 to 6 are variables of wine accessor no.1, columns 7 to 12 are variables of wine accessor no.2.
 
-*   A list of variable names indicating column names of each data groups,you can use the first and last variable names of each group: e.g., for this wine data sets, we can use 'sets=list(c("V1.G1","V6.G1"),c("V1.G2","V8.G2"))' for data group 1 and data group 2. Alternatively, you can use the full list of variable names of each group: e.g., `sets=list(c("V1.G1","V2.G1","V3.G1","V4.G1","V5.G1","V6.G1"),
+*   A list of variable names indicating column names of each data groups,you can use the first and last variable names of each group: e.g., for this wine data sets, we can use `sets=list(c("V1.G1","V6.G1"),c("V1.G2","V8.G2"))` for data group 1 and data group 2. Alternatively, you can use the full list of variable names of each group: e.g., `sets=list(c("V1.G1","V2.G1","V3.G1","V4.G1","V5.G1","V6.G1"),
 c("V1.G2","V2.G2","V3.G2","V4.G2","V7.G2","V8.G2"))` for data group 1 and data group 2. 
 
 #### ncomp
@@ -429,7 +429,7 @@ bootstrap(mfa_wine,nbt=10000)
 We have created a Shiny App for visualization of the output of this package. Please see our Shiny App at [MFA Shiny App](https://zyz2012.shinyapps.io/ShinyApp/)In this part, we will give a brief introduction about how to use the shiny app to do multiple factor analysis. Users are required to give the inputs including **data**,**set**, and the **dimesions** of the outcomes which they want to plot. 
 
 ## Input
-`data`: Users should choose data of **.csv** format with the header. If nothing is chosen, the shiny app will plot the outcome of the *wine.csv* as default.
+`data`: Users should choose data of **.csv** format with the header and with the first column as the id. If nothing is chosen, the shiny app will plot the outcome of the *wine.csv* as default.
 
 `sets`: Users should choose sets of **.txt** format. The .txt file should have the sets of the format below:
 $$1:6,7:12,13:18,19:23,24:29,30:34,35:38,39:44,45:53$$
