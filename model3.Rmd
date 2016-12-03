@@ -676,4 +676,6 @@ devtools::build()
 # checking install
 devtools::install()
 
+install.packages("~/243Project/MFA_0.0.1.0000.tar.gz", repos = NULL, type="source")
+
 ```

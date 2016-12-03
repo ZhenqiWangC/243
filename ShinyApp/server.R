@@ -8,9 +8,9 @@
 library(shiny)
 
 #Source MFA function
-source("mfa.R")
+source("functions/mfa.R")
 #Get the plot functions
-source("plotfunctions.R")
+source("functions/plotfunctions.R")
 
 
 shinyServer(function(input, output) {
@@ -18,7 +18,7 @@ shinyServer(function(input, output) {
   #Reactive data input(default:wine.csv)
   newdata <- reactive({
     if(is.null(input$file1) || is.null(input$file2)){
-      return(read.table("wine.csv",header=F,stringsAsFactors = F,sep = ','))
+      return(read.table("data/wine.csv",header=F,stringsAsFactors = F,sep = ','))
     }
     else{
       return(read.csv(input$file1$datapath,sep = ','))
@@ -71,9 +71,28 @@ shinyServer(function(input, output) {
     })
   output$scorePlot <- renderPlot({
     test = newtest()
+    x = test
     dim = newdim()
-    plot_partial(test,dim)
-    })
+    #plot_partial(test,dim)
+    
+    names<-sapply(dim,function(x){paste0("Dim",x)})
+    partial<-lapply(x@partial_factor_score,function(x){x[,dim]})
+    loadings<- -data.frame(x@loadings[,dim])
+    loadings[,1]<-loadings[,1]*(sqrt(x@eigenvalues[dim[1]])/sd(loadings[,1]))
+    loadings[,2]<-loadings[,2]*(sqrt(x@eigenvalues[dim[2]])/sd(loadings[,2]))
+    sets = x@sets
+    plist <- list()
+    i = as.numeric(input$Groupnum)
+      mydata<-data.frame(partial[[i]])
+      mydata[,2]<- -mydata[,2]
+      mydata$id<-rownames(mydata)
+      mydata2<-loadings[sets[[i]],]
+      mydata2[,1]<- -mydata2[,1]
+      myplot<-partial_plot(i,mydata,mydata2,names)
+    
+    myplot    
+    
+  })
   output$loadingsPlot <- renderPlot({
     test = newtest()
     dim = newdim()
@@ -110,7 +129,8 @@ shinyServer(function(input, output) {
   })
   output$ex3 <- renderDataTable({
     test = newtest()
-    datatable(round(test@partial_factor_score[[as.numeric(input$Groupnum)]][,c(1,2)],2),options = list(dom = 't',initComplete = JS(
+    dim = newdim()
+    datatable(round(test@partial_factor_score[[as.numeric(input$Groupnum)]][,dim],2),options = list(dom = 't',initComplete = JS(
       "function(settings, json) {",
       "$(this.api().table().header()).css({'background-color': '#22EEAA', 'color': '#fff'});",
       "}")

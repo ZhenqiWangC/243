@@ -14,9 +14,17 @@ shinyUI(fluidPage(theme = "bootstrap0.css",
   headerPanel(
     h1("Multiple Factor Analysis", 
        style = "font-family: 'serif', cursive;
-       font-weight: 500; line-height: 1.1; 
+       font-weight: 500; 
        color: #000000;")),
-
+  HTML("
+      <br>
+      <div> This is the final project for class STAT243-Fall-2016. </div>
+      <div> For more information about input format of the data, 
+       <a href='https://github.com/MFA-Rpackage/dev/blob/master/mfa_vignette.html'>click here</a>. </div> 
+       <div> To see the online version published on Rstuio, 
+       <a href='https://zyz2012.shinyapps.io/ShinyApp/'>click here</a>. </div> 
+       "),
+  br(),
   # Sidebar with a slider input for number of bins
   sidebarLayout(
     sidebarPanel(
@@ -38,7 +46,7 @@ shinyUI(fluidPage(theme = "bootstrap0.css",
       
       #Tableoutput
       absolutePanel(
-        top = 320, left = 20, width = 350,height = 'auto',
+        top = 340, left = 20, width = 350,height = 'auto',
         draggable = TRUE,
         wellPanel(
           HTML(markdownToHTML(fragment.only=TRUE, text=c(

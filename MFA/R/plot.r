@@ -92,8 +92,9 @@ setMethod("plot",signature="mfa",
 
             # rescale loading to singular value
 
-            loadings[,1]<-loadings[,1]*(sqrt(x@eigenvalues[1])/sd(loadings[,1]))
-            loadings[,2]<-loadings[,2]*(sqrt(x@eigenvalues[2])/sd(loadings[,2]))
+            for (i in 1:length(loadings[1,])){
+              loadings[,i]<-loadings[,i]*(sqrt(x@eigenvalues[i])/sd(loadings[,i]))
+            }
 
             compromise$id<-rownames(compromise)
             loadings$id<-rownames(loadings)
